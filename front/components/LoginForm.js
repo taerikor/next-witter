@@ -3,8 +3,8 @@ import { Input, Form, Button } from 'antd'
 import Link from 'next/link'
 import styled from 'styled-components'
 import useInput from '../hooks/useInput'
-import { useDispatch } from 'react-redux'
-import { loginAction } from '../reducers/user'
+import { useDispatch, useSelector } from 'react-redux'
+import { loginRequestAction } from '../reducers/user'
 
 const ButtonWrapper = styled.div`
     margin-top: 10px;
@@ -18,9 +18,10 @@ const LoginForm = () => {
     const [id, onIdChange] = useInput('')
     const [password, onPasswordChange] = useInput('')
     const dispatch = useDispatch();
+    const {isLoggingIn} = useSelector(state => state.user)
 
     const onSubmit = useCallback(() => {
-        dispatch(loginAction({id,password}))
+        dispatch(loginRequestAction({id,password}))
     }, [id, password])
 
     return (
@@ -36,7 +37,7 @@ const LoginForm = () => {
                 <Input name='user-password' type='password' value={password} onChange={onPasswordChange} required />
             </div>
             <ButtonWrapper>
-                <Button type='primary' htmlType='submit' loading={false}>Log in</Button>
+                <Button type='primary' htmlType='submit' loading={isLoggingIn}>Log in</Button>
                 <Link href='/signup'><a><Button>Register</Button></a></Link>
             </ButtonWrapper>
         </FormWrapper>

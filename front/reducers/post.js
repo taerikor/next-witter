@@ -43,16 +43,33 @@ const dummyPost = {
   };
 
 // types
-const ADD_POST = 'add_post'
+const ADD_POST_REQUEST = 'add_post_request'
+const ADD_POST_SUCCESS = 'add_post_success'
+const ADD_POST_FAILURE = 'add_post_failure'
 
 // Actions
-export const addPost = {
-    type: ADD_POST
-}
+export const addPost = (data) => ({
+    type: ADD_POST_REQUEST,
+    data,
+  });
 
 const reducer = (state = initialState, action ) => {
     switch (action.type) {
-        case ADD_POST : {
+        case ADD_POST_REQUEST : {
+            return {
+                ...state,
+                mainPosts:[dummyPost, ...state.mainPosts],
+                postAdded:true
+            }
+        }
+        case ADD_POST_SUCCESS : {
+            return {
+                ...state,
+                mainPosts:[dummyPost, ...state.mainPosts],
+                postAdded:true
+            }
+        }
+        case ADD_POST_FAILURE : {
             return {
                 ...state,
                 mainPosts:[dummyPost, ...state.mainPosts],
