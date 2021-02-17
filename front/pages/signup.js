@@ -3,14 +3,18 @@ import AppLayout from '../components/AppLayout'
 import { Form, Input, Checkbox, Button } from 'antd'
 import useInput from '../hooks/useInput'
 import styled from 'styled-components'
+import { useDispatch, useSelector } from 'react-redux'
+import { SIGN_UP_REQUEST } from '../reducers/user'
 
 const ErrorMessage = styled.div`
     color: red ;
 `
 
 function signup() {
+    const dispatch = useDispatch()
+    const { signUpLoading } = useSelector(state => state.user)
 
-    const [id, onIdChange] = useInput('')
+    const [email, onEmailChange] = useInput('')
     const [password, onPasswordChange] = useInput('')
     const [nickname, onNicknameChange] = useInput('')
 
@@ -37,7 +41,13 @@ function signup() {
         if(!term){
             return setTermError(true)
         }
-    }, [password, passwordConfirm, term])
+        dispatch({
+            type: SIGN_UP_REQUEST,
+            data: {email, password, nickname}
+        })
+
+    }, [email, password, passwordConfirm, term])
+
     return (
         <AppLayout>
             <Form onFinish={onSubmit}>
@@ -47,9 +57,9 @@ function signup() {
                 <Input name='user-nickname' value={nickname} onChange={onNicknameChange} required />
             </div> 
             <div>
-                <label htmlFor='user-id'>Id</label>
+                <label htmlFor='user-email'>Email</label>
                 <br />
-                <Input name='user-id' value={id} onChange={onIdChange} required />
+                <Input name='user-email' type='email' value={email} onChange={onEmailChange} required />
             </div> 
             <div>
             <label htmlFor='user-password'>Password</label>
@@ -73,7 +83,7 @@ function signup() {
                 {termError && <ErrorMessage>Please Check Agree</ErrorMessage>}
             </div>
             <br />
-            <Button type='primary' htmlType='submit'>Submit</Button>
+            <Button type='primary' htmlType='submit' loading={signUpLoading}>Submit</Button>
             </Form>
         </AppLayout>
     )

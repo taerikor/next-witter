@@ -15,21 +15,21 @@ const FormWrapper = styled(Form)`
 `
 
 const LoginForm = () => {
-    const [id, onIdChange] = useInput('')
+    const [email, onEmailChange] = useInput('')
     const [password, onPasswordChange] = useInput('')
     const dispatch = useDispatch();
-    const {isLoggingIn} = useSelector(state => state.user)
+    const {logInLoading} = useSelector(state => state.user)
 
     const onSubmit = useCallback(() => {
-        dispatch(loginRequestAction({id,password}))
-    }, [id, password])
+        dispatch(loginRequestAction({email,password}))
+    }, [email, password])
 
     return (
         <FormWrapper onFinish={onSubmit}>
             <div>
-                <label htmlFor='user-id'>Id</label>
+                <label htmlFor='user-email'>Email</label>
                 <br />
-                <Input name='user-id' value={id} onChange={onIdChange} required />
+                <Input name='user-email' type='email' value={email} onChange={onEmailChange} required />
             </div> 
             <div>
             <label htmlFor='user-password'>Password</label>
@@ -37,7 +37,7 @@ const LoginForm = () => {
                 <Input name='user-password' type='password' value={password} onChange={onPasswordChange} required />
             </div>
             <ButtonWrapper>
-                <Button type='primary' htmlType='submit' loading={isLoggingIn}>Log in</Button>
+                <Button type='primary' htmlType='submit' loading={logInLoading}>Log in</Button>
                 <Link href='/signup'><a><Button>Register</Button></a></Link>
             </ButtonWrapper>
         </FormWrapper>

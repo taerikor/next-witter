@@ -6,7 +6,10 @@ import {
     LOG_IN_SUCCESS, 
     LOG_OUT_FAILURE, 
     LOG_OUT_REQUEST, 
-    LOG_OUT_SUCCESS 
+    LOG_OUT_SUCCESS, 
+    SIGN_UP_FAILURE, 
+    SIGN_UP_REQUEST, 
+    SIGN_UP_SUCCESS
 } from '../reducers/user';
 
 
@@ -53,26 +56,26 @@ function* logOut() {
     }
 }
 
-// function signUpApi () {
-//     return axios.post('/api/signup')
-// }
+function signUpApi () {
+    return axios.post('/api/signup')
+}
 
-// function* signUp(action) {
-//     try{
-//         console.log('saga sign Up')
-//         //const result = yield call(signUpApi);
-//         yield delay(1000);
-//         yield put({
-//             type:SIGN_UP_SUCCESS,
-//         });
-//     }catch (err){
-//         console.log(err)
-//         yield put({
-//             type:SIGN_UP_FAILURE,
-//             error: err.response.data
-//         })
-//     }
-// }
+function* signUp(action) {
+    try{
+        console.log('saga sign Up')
+        //const result = yield call(signUpApi);
+        yield delay(1000);
+        yield put({
+            type:SIGN_UP_SUCCESS,
+        });
+    }catch (err){
+        console.log(err)
+        yield put({
+            type:SIGN_UP_FAILURE,
+            error: err.response.data
+        })
+    }
+}
 
 // function followAPI() {
 //     return axios.post('/api/follow');
@@ -132,9 +135,9 @@ function* watchLogOut() {
     yield takeLatest(LOG_OUT_REQUEST, logOut)
 }
 
-// function* watchSignUp() {
-//     yield takeLatest(SIGN_UP_REQUEST, signUp)
-// }
+function* watchSignUp() {
+    yield takeLatest(SIGN_UP_REQUEST, signUp)
+}
 
 export default function* userSaga() {
     yield all([
@@ -142,6 +145,6 @@ export default function* userSaga() {
         // fork(watchUnfollow),
         fork(watchLogIn),
         fork(watchLogOut),
-        // fork(watchSignUp),
+        fork(watchSignUp),
     ])
 }

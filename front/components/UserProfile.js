@@ -1,7 +1,7 @@
 import React, { useCallback } from 'react'
 import { Card, Avatar, Button } from 'antd'
 import { useDispatch, useSelector } from 'react-redux'
-import { logoutRequestAction, LOG_OUT_REQUEST } from '../reducers/user'
+import { LOG_OUT_REQUEST } from '../reducers/user'
 
 function UserProfile() {
     const dispatch = useDispatch()
@@ -10,20 +10,20 @@ function UserProfile() {
             type: LOG_OUT_REQUEST,
           });
     }, [])
-    const {user,isLoggingOut} = useSelector(state => state.user)
+    const {user,logOutLoading} = useSelector(state => state.user)
     return (
         <Card
             actions={[
-                <div key='twit'>Twit<br />0</div>,
-                <div key='followings'>Following<br />0</div>,
-                <div key='followers'>Follower<br />0</div>,
+                <div key='twit'>Twit<br />{user.Posts.length}</div>,
+                <div key='followings'>Following<br />{user.Followings.length}</div>,
+                <div key='followers'>Follower<br />{user.Followers.length}</div>,
             ]} 
         >
             <Card.Meta
             avatar={<Avatar>{user.nickname[0]}</Avatar>}
             title={user.nickname}
             />
-            <Button loading={isLoggingOut} onClick={onLogout}>
+            <Button loading={logOutLoading} onClick={onLogout}>
                 Log out
             </Button>
         </Card>

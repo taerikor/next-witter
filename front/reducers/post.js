@@ -1,3 +1,5 @@
+
+
 const  initialState = {
     mainPosts: [{
         id: 1,
@@ -28,7 +30,12 @@ const  initialState = {
         }]
       }],
       imagePaths: [],
-      postAdded: false,
+      addPostLoading: false,
+      addPostDone: false,
+      addPostError: null,
+      addCommentLoading: false,
+      addCommentDone: false,
+      addCommentError: null,
 }
 
 const dummyPost = {
@@ -43,13 +50,22 @@ const dummyPost = {
   };
 
 // types
-const ADD_POST_REQUEST = 'add_post_request'
-const ADD_POST_SUCCESS = 'add_post_success'
-const ADD_POST_FAILURE = 'add_post_failure'
+export const ADD_POST_REQUEST = 'add_post_request'
+export const ADD_POST_SUCCESS = 'add_post_success'
+export const ADD_POST_FAILURE = 'add_post_failure'
+
+export const ADD_COMMENT_REQUEST = 'add_comment_request'
+export const ADD_COMMENT_SUCCESS = 'add_comment_success'
+export const ADD_COMMENT_FAILURE = 'add_comment_failure'
 
 // Actions
 export const addPost = (data) => ({
     type: ADD_POST_REQUEST,
+    data,
+  });
+
+export const addComment = (data) => ({
+    type: ADD_COMMENT_REQUEST,
     data,
   });
 
@@ -58,24 +74,52 @@ const reducer = (state = initialState, action ) => {
         case ADD_POST_REQUEST : {
             return {
                 ...state,
-                mainPosts:[dummyPost, ...state.mainPosts],
-                postAdded:true
+                addPostLoading:true,
+                addPostDone:false,
+                addPostError:null,
             }
         }
         case ADD_POST_SUCCESS : {
             return {
                 ...state,
                 mainPosts:[dummyPost, ...state.mainPosts],
-                postAdded:true
+                addPostLoading:false,
+                addPostDone:true
             }
         }
         case ADD_POST_FAILURE : {
             return {
                 ...state,
-                mainPosts:[dummyPost, ...state.mainPosts],
-                postAdded:true
+                addPostLoading:false,
+                addPostError: action.error
             }
         }
+        case ADD_COMMENT_REQUEST : {
+            return {
+                ...state,
+                addCommentLoading:true,
+                addCommentDone:false,
+                addCommentError:null,
+            }
+        }
+        case ADD_COMMENT_SUCCESS : {
+            return {
+                ...state,
+                // mainPosts:[dummyPost, ...state.mainPosts],
+                addCommentLoading:false,
+                addCommentDone:true
+            }
+        }
+        case ADD_COMMENT_FAILURE : {
+            return {
+                ...state,
+                addCommentLoading:false,
+                addCommentError: action.error
+            }
+        }
+        ldsf
+        SVGAnimatedLengthList
+        
         default: {
             return { ...state }
         }
