@@ -1,10 +1,12 @@
-import {Card, Popover, Button, Avatar} from 'antd'
+import {Card, Popover, Button, Avatar, List, Comment} from 'antd'
 import {RetweetOutlined, HeartOutlined, MessageOutlined, EllipsisOutlined, HeartTwoTone} from '@ant-design/icons'
 import PostImages from './PostImages'
 import ButtonGroup from 'antd/lib/button/button-group'
 import PropTypes from 'prop-types'
 import { useSelector } from 'react-redux'
 import { useCallback, useState } from 'react'
+import CommentForm from './CommentForm'
+import PostCardContent from './PostCardContent'
 
 
 const PostCard = ({post}) => {
@@ -48,10 +50,27 @@ const PostCard = ({post}) => {
             <Card.Meta 
             avatar={<Avatar>{post.User.nickname[0]}</Avatar>}
             title={post.User.nickname}
-            description={post.content}
+            description={<PostCardContent postData={post.content} />}
             />
         </Card>
-        {toggleComment && <div>Comment</div>}
+        {toggleComment && (
+            <div>
+            <CommentForm post={post} />
+            <List 
+            header={`${post.Comments.length} Comments`}
+            itemLayout='horizontal'
+            dataSource={post.Comments}
+            renderItem={item => (
+                <li>
+                    <Comment 
+                    author={item.User.nickname}
+                    avatar={<Avatar>{item.User.nickname[0]}</Avatar>}
+                    content={item.content}
+                    />
+                </li>
+            )}
+            />
+            </div>)}
         {/* <CommentForm />
         <Comments /> */}
     </div>
