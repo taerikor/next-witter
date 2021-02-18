@@ -3,14 +3,18 @@ import {RetweetOutlined, HeartOutlined, MessageOutlined, EllipsisOutlined, Heart
 import PostImages from './PostImages'
 import ButtonGroup from 'antd/lib/button/button-group'
 import PropTypes from 'prop-types'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { useCallback, useState } from 'react'
 import CommentForm from './CommentForm'
 import PostCardContent from './PostCardContent'
+import { REMOVE_POST_REQUEST } from '../reducers/post'
+import FollowButton from './FollowButton'
 
 
 const PostCard = ({post}) => {
-    const userId = useSelector(state => state.user.User && state.user.User.id)
+    const userId = useSelector(state => state.user?.user?.id)
+    const { removePostLoading } = useSelector(state => state.post)
+    const dispatch = useDispatch();
 
     const [liked,setLiked] = useState(false)
     const [toggleComment,setToggleComment] = useState(false)
@@ -18,9 +22,18 @@ const PostCard = ({post}) => {
     const onToggleLike = useCallback(()=>{
         setLiked(prev => !prev)
     },[])
+
     const onToggleComment = useCallback(()=>{
         setToggleComment(prev => !prev)
     },[])
+    
+    const onRemoveClick = useCallback(() => {
+        console.log(post.id)
+        dispatch({
+            type:REMOVE_POST_REQUEST,
+            data: post.id
+        })
+    }, [])
 
     return( 
     <div style={{marginBottom:20}}>
@@ -37,7 +50,7 @@ const PostCard = ({post}) => {
                         {userId && post.User.id === userId ?
                         <>
                         <Button>Revise</Button>
-                        <Button>Remove</Button>
+                        <Button loading={removePostLoading} onClick={onRemoveClick}>Remove</Button>
                         </>
                         :<Button>Report</Button>
                     }
@@ -46,6 +59,7 @@ const PostCard = ({post}) => {
                     <EllipsisOutlined />
                 </Popover>
             ]}
+            extra={userId && <FollowButton post={post} />}
         >
             <Card.Meta 
             avatar={<Avatar>{post.User.nickname[0]}</Avatar>}

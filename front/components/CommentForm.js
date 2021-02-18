@@ -5,8 +5,8 @@ import PropTypes from 'prop-types'
 import { useDispatch, useSelector } from 'react-redux'
 import { ADD_COMMENT_REQUEST } from '../reducers/post'
 const CommentForm = ({ post }) => {
-    const userId = useSelector(state => state.user?.User?.id)
-    const { addCommentDone } = useSelector(state => state.post)
+    const userId = useSelector(state => state.user?.user?.id)
+    const { addCommentDone,addCommentLoading } = useSelector(state => state.post)
     const dispatch = useDispatch();
 
     const [commentText, onCommentChange, setCommentText] = useInput('') 
@@ -29,9 +29,10 @@ const CommentForm = ({ post }) => {
              <Form.Item style={{ position: 'relative', margin: 0 }}>
                  <Input.TextArea value={commentText} onChange={onCommentChange} row={4} />
                  <Button 
+                 loading={addCommentLoading}
                  type='primary' 
                  htmlType='submit'
-                 style={{ position:'absolute', right: 0, bottom: -40}}
+                 style={{ position:'absolute', right: 0, bottom: -40, zIndex: 1}}
                  >Twit</Button>
              </Form.Item>
         </Form>
