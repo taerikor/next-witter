@@ -1,10 +1,11 @@
-import React, { useCallback, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import AppLayout from '../components/AppLayout'
 import { Form, Input, Checkbox, Button } from 'antd'
 import useInput from '../hooks/useInput'
 import styled from 'styled-components'
 import { useDispatch, useSelector } from 'react-redux'
 import { SIGN_UP_REQUEST } from '../reducers/user'
+import Router from 'next/router'
 
 const ErrorMessage = styled.div`
     color: red ;
@@ -12,7 +13,26 @@ const ErrorMessage = styled.div`
 
 function signup() {
     const dispatch = useDispatch()
-    const { signUpLoading } = useSelector(state => state.user)
+    const { signUpLoading, signUpDone, signUpError, user } = useSelector(state => state.user)
+
+    useEffect(() => {
+        if(signUpDone){
+            Router.replace('/')
+        }
+    }, [signUpDone])
+
+    useEffect(() => {
+        if(user?.id){
+            Router.replace('/')
+        }
+    }, [user])
+
+    useEffect(() => {
+        if(signUpError){
+            alert(signUpError)
+        }
+    }, [signUpError])
+
 
     const [email, onEmailChange] = useInput('')
     const [password, onPasswordChange] = useInput('')
@@ -29,7 +49,7 @@ function signup() {
     const [termError, setTermError] = useState(false)
     const onTermChange = useCallback((e) => {
         setTerm(e.target.checked)
-        // setTermError(term !== passwordConfirm)
+        setTermError(false)
     }, [])
 
 

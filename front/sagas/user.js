@@ -1,4 +1,4 @@
-import { all, delay, fork, put, takeLatest } from 'redux-saga/effects';
+import { all, delay, fork, put, takeLatest, call } from 'redux-saga/effects';
 import axios from 'axios'
 import { 
     CHANGE_NICKNAME_FAILURE,
@@ -22,17 +22,15 @@ UNFOLLOW_SUCCESS} from '../reducers/user';
 
 
 function logInApi (data) {
-    return axios.post('/api/login',data)
+    return axios.post('/user/login',data)
 }
 
 function* logIn(action) {
     try{
-        console.log('saga Login')
-        //const result = yield call(logInApi);
-        yield delay(1000);
+        const result = yield call(logInApi,action.data);
         yield put({
             type:LOG_IN_SUCCESS,
-            data: action.data,
+            data: result.data,
         });
     }catch (err){
         console.log(err)
@@ -44,14 +42,12 @@ function* logIn(action) {
 }
 
 function logOutApi () {
-    return axios.post('/api/logout')
+    return axios.post('/user/logout')
 }
 
 function* logOut() {
     try{
-        console.log('saga LogOut')
-        //const result = yield call(logOutApi);
-        yield delay(1000);
+        const result = yield call(logOutApi);
         yield put({
             type:LOG_OUT_SUCCESS,
         });
@@ -64,15 +60,14 @@ function* logOut() {
     }
 }
 
-function signUpApi () {
-    return axios.post('/api/signup')
+function signUpApi (data) {
+    return axios.post('/user',data)
 }
 
 function* signUp(action) {
     try{
-        console.log('saga sign Up')
-        //const result = yield call(signUpApi);
-        yield delay(1000);
+        const result = yield call(signUpApi, action.data);
+        console.log(result)
         yield put({
             type:SIGN_UP_SUCCESS,
         });
