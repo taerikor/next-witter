@@ -1,4 +1,4 @@
-import { all, delay, fork, put, takeLatest, throttle } from 'redux-saga/effects';
+import { all, delay, fork, put, takeLatest, call} from 'redux-saga/effects';
 import axios from 'axios'
 import shortId from 'shortid'
 import { 
@@ -20,52 +20,45 @@ import { ADD_POST_TO_ME, REMOVE_POST_OF_ME } from '../reducers/user';
 
 
 function addPostApi(data) {
-   return axios.post('/api/addPost',data)
+   return axios.post('/post',{content: data })
 }
 
 function* addPost (action) {
+    console.log(action)
     try{
-        console.log('saga add post')
-        //const result = yield call(addPostApi)
-        const id = shortId.generate()
-        yield delay(1000)
+        const result = yield call(addPostApi, action.data)
         yield put({
             type:ADD_POST_SUCCESS,
-            data: {
-                id,
-                content: action.data
-            }
+            data: result.data
         })
         yield put({
             type:ADD_POST_TO_ME,
-            data: id,
+            data: result.data.id
         })
     }catch(err){
         console.log(err)
         yield put({
             type:ADD_POST_FAILURE,
-            error: err.reponse.data,
+            error: err.response.data,
         })
     }
 }
 function addCommentApi(data) {
-   return axios.post('/api/addComment',data)
+   return axios.post(`/post/${data.postId}/comment`,data)
 }
 
 function* addComment (action) {
     try{
-        console.log(action)
-        //const result = yield call(addCommentApi)
-        yield delay(1000)
+        const result = yield call(addCommentApi, action.data)
         yield put({
             type:ADD_COMMENT_SUCCESS,
-            data: action.data
+            data: result.data
         })
     }catch(err){
         console.log(err)
         yield put({
             type:ADD_COMMENT_FAILURE,
-            error: err.reponse.data,
+            error: err.response.data,
         })
     }
 }
@@ -91,29 +84,27 @@ function* removePost (action) {
         console.log(err)
         yield put({
             type:REMOVE_POST_FAILURE,
-            error: err.reponse.data,
+            error: err.response.data,
         })
     }
 }
 
-function loadPostsApi(data) {
-   return axios.get('/api/posts')
+function loadPostsApi() {
+   return axios.get('/posts')
 }
 
 function* loadPosts (action) {
     try{
-        console.log(action)
-        //const result = yield call(loadPostsApi)
-        yield delay(1000)
+        const result = yield call(loadPostsApi)
         yield put({
             type:LOAD_POSTS_SUCCESS,
-            data: generateDummyPost(10)
+            data: result.data
         })
     }catch(err){
         console.log(err)
         yield put({
             type:LOAD_POSTS_FAILURE,
-            error: err.reponse.data,
+            error: err.response.data,
         })
     }
 }

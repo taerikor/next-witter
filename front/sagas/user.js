@@ -7,6 +7,7 @@ import {
     FOLLOW_FAILURE,
     FOLLOW_REQUEST,
     FOLLOW_SUCCESS,
+    LOAD_MY_INFO_REQUEST,
 LOG_IN_FAILURE,
 LOG_IN_REQUEST,
 LOG_IN_SUCCESS,
@@ -20,6 +21,26 @@ UNFOLLOW_FAILURE,
 UNFOLLOW_REQUEST,
 UNFOLLOW_SUCCESS} from '../reducers/user';
 
+
+function loadMyInfoApi () {
+    return axios.get('/user')
+}
+
+function* loadMyInfo(action) {
+    try{
+        const result = yield call(loadMyInfoApi);
+        yield put({
+            type:LOG_IN_SUCCESS,
+            data: result.data,
+        });
+    }catch (err){
+        console.log(err)
+        yield put({
+            type:LOG_IN_FAILURE,
+            error: err.response.data
+        })
+    }
+}
 
 function logInApi (data) {
     return axios.post('/user/login',data)
@@ -166,6 +187,10 @@ function* watchChangeNickname() {
     yield takeLatest(CHANGE_NICKNAME_REQUEST, changeNickname)
 }
 
+function* watchLoadMyInfo() {
+    yield takeLatest(LOAD_MY_INFO_REQUEST, loadMyInfo)
+}
+
 export default function* userSaga() {
     yield all([
         fork(watchFollow),
@@ -174,5 +199,6 @@ export default function* userSaga() {
         fork(watchLogOut),
         fork(watchSignUp),
         fork(watchChangeNickname),
+        fork(watchLoadMyInfo)
     ])
 }
