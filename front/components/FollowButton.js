@@ -24,6 +24,10 @@ const FollowButton = ({post}) => {
         }
     },[isFollowing])
 
+    if(user.id === post.User.id){
+        return null;
+    }
+
     return (
         <Button
         loading={followLoading || unfollowLoading} 

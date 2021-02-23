@@ -55,4 +55,47 @@ Router.post(`/:postId/comment`,isLoggedIn, async (req, res, next) => {
     }
 })
 
+Router.patch('/:postId/like', async(req, res, next) => {
+    try{
+        const post = await Post.findOne({ where:{ id: req.params.postId }})
+        if(!post){
+            return res.status(403).send(`This post doesn't exist`)
+        }
+        await post.addLikers(req.user.id);
+        res.json({ PostId: post.id, UserId: req.user.id})
+    }catch(error){
+        console.error(error)
+        next(error)
+    }
+})
+
+Router.delete('/:postId/like', async(req, res, next) => {
+    try{
+        const post = await Post.findOne({ where:{ id: req.params.postId }})
+        if(!post){
+            return res.status(403).send(`This post doesn't exist`)
+        }
+        await post.removeLikers(req.user.id);
+        res.json({ PostId: post.id, UserId: req.user.id})
+    }catch(error){
+        console.error(error)
+        next(error)
+    }
+})
+
+Router.delete('/:postId', async (req, res, next) => {
+    try{
+        await Post.destroy({
+            where:{
+                id: req.params.postId,
+                Userid: req.user.id
+            }
+        })
+        res.status(200).json({ PostId: parseInt(req.params.postId, 10)})
+    }catch(error){
+        console.error(error)
+        next(error)
+    }
+})
+
 module.exports = Router;

@@ -5,6 +5,12 @@ import faker from 'faker'
 const  initialState = {
       mainPosts: [],
       imagePaths: [],
+      likePostLoading: false,
+      likePostDone: false,
+      likePostError: null,
+      unlikePostLoading: false,
+      unlikePostDone: false,
+      unlikePostError: null,
       addPostLoading: false,
       addPostDone: false,
       addPostError: null,
@@ -49,6 +55,14 @@ const dummyComment = (data) => ({
   }));
 
 // types
+export const LIKE_POST_REQUEST = 'like_post_request'
+export const LIKE_POST_SUCCESS = 'like_post_success'
+export const LIKE_POST_FAILURE = 'like_post_failure'
+
+export const UNLIKE_POST_REQUEST = 'unlike_post_request'
+export const UNLIKE_POST_SUCCESS = 'unlike_post_success'
+export const UNLIKE_POST_FAILURE = 'unlike_post_failure'
+
 export const LOAD_POSTS_REQUEST = 'load_posts_request'
 export const LOAD_POSTS_SUCCESS = 'load_posts_success'
 export const LOAD_POSTS_FAILURE = 'load_posts_failure'
@@ -78,6 +92,38 @@ export const addComment = (data) => ({
 
 const reducer = (state = initialState, action ) => produce(state, (draft) => {
   switch (action.type) {
+      case LIKE_POST_REQUEST : 
+              draft.likePostLoading = true;
+              draft.likePostDone = false;
+              draft.likePostError = null;
+              break
+      case LIKE_POST_SUCCESS :{
+      const post = draft.mainPosts.find(item => item.id === action.data.PostId)
+      post.Likers.push({ id: action.data.UserId})
+      draft.likePostLoading = false;
+      draft.likePostDone = true;
+      break
+    }
+      case LIKE_POST_FAILURE : 
+      draft.likePostLoading = false;
+      draft.likePostError = action.error;
+      break
+      case UNLIKE_POST_REQUEST : 
+              draft.unlikePostLoading = true;
+              draft.unlikePostDone = false;
+              draft.unlikePostError = null;
+              break
+      case UNLIKE_POST_SUCCESS : {
+      const post = draft.mainPosts.find(item => item.id === action.data.PostId)
+      post.Likers = post.Likers.filter(item => item.id !== action.data.UserId)
+      draft.unlikePostLoading = false;
+      draft.unlikePostDone = true;
+      break
+    }
+      case UNLIKE_POST_FAILURE : 
+      draft.unlikePostLoading = false;
+      draft.unlikePostError = action.error;
+      break
       case ADD_POST_REQUEST : 
               draft.addPostLoading = true;
               draft.addPostDone = false;
@@ -113,7 +159,7 @@ const reducer = (state = initialState, action ) => produce(state, (draft) => {
       draft.removePostError = null
       break
       case REMOVE_POST_SUCCESS : 
-             draft.mainPosts = draft.mainPosts.filter(post => post.id !== action.data ),
+             draft.mainPosts = draft.mainPosts.filter(post => post.id !== action.data.PostId ),
              draft.removePostLoading = false;
              draft.removePostDone = true;
              break
