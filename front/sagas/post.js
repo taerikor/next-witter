@@ -13,6 +13,9 @@ import {
     LOAD_POSTS_FAILURE, 
     LOAD_POSTS_REQUEST, 
     LOAD_POSTS_SUCCESS, 
+    LOAD_POST_FAILURE, 
+    LOAD_POST_REQUEST, 
+    LOAD_POST_SUCCESS, 
     REMOVE_POST_FAILURE, 
     REMOVE_POST_REQUEST,
     REMOVE_POST_SUCCESS,
@@ -194,6 +197,26 @@ function* loadPosts (action) {
     }
 }
 
+function loadPostApi(data) {
+   return axios.get(`/post/${data}`)
+}
+
+function* loadPost (action) {
+    try{
+        const result = yield call(loadPostApi, action.data)
+        yield put({
+            type:LOAD_POST_SUCCESS,
+            data: result.data
+        })
+    }catch(err){
+        console.log(err)
+        yield put({
+            type:LOAD_POST_FAILURE,
+            error: err.response.data,
+        })
+    }
+}
+
 function* watchRetweet() {
     yield takeLatest(RETWEET_REQUEST,  retweet)
 }
@@ -226,6 +249,10 @@ function* watchLoadPosts() {
     yield takeLatest( LOAD_POSTS_REQUEST,  loadPosts)
 }
 
+function* watchLoadPost() {
+    yield takeLatest( LOAD_POST_REQUEST,  loadPost)
+}
+
 export default function* postSaga() {
     yield all([
         fork(watchRetweet),
@@ -235,6 +262,7 @@ export default function* postSaga() {
         fork(watchAddPost),
         fork(watchAddComment),
         fork(watchRemovePost),
-        fork(watchLoadPosts)
+        fork(watchLoadPosts),
+        fork(watchLoadPost),
     ])
   }

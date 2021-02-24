@@ -1,10 +1,13 @@
+import axios from 'axios'
 import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
+import { END } from 'redux-saga'
 import AppLayout from '../components/AppLayout'
 import PostCard from '../components/PostCard'
 import PostForm from '../components/PostForm'
 import { LOAD_POSTS_REQUEST } from '../reducers/post'
 import { LOAD_MY_INFO_REQUEST } from '../reducers/user'
+import wrapper from '../store/configureStore'
 
 
 const Home = () => {
@@ -18,17 +21,6 @@ const Home = () => {
         }
       }, [retweetError]);
 
-    useEffect(() => {
-        dispatch({
-            type:LOAD_POSTS_REQUEST
-        })
-    },[])
-    
-    useEffect(() => {
-        dispatch({
-            type:LOAD_MY_INFO_REQUEST
-        })
-    },[])
 
     useEffect(() => {
         const handleScroll = () => {
@@ -56,5 +48,21 @@ return <AppLayout>
     {mainPosts.map(post => <PostCard key={post.id} post={post} />)}
      </AppLayout>
 }
+
+export const getServerSideProps = wrapper.getServerSideProps( async (context) => {
+    const cookie = context.req ? context.req.headers.cookie : '';
+    axios.defaults.headers.Cookie = '';
+    if(context.req && cookie) {
+        axios.defaults.headers.Cookie = cookie;
+    }
+    context.store.dispatch({
+        type:LOAD_POSTS_REQUEST
+    })
+    context.store.dispatch({
+        type:LOAD_MY_INFO_REQUEST
+    })
+    context.store.dispatch(END)
+    await context.store.sagaTask.toPromise()
+})
 
 export default Home

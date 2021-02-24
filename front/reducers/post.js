@@ -23,6 +23,9 @@ const  initialState = {
       loadPostsLoading: false,
       loadPostsDone: false,
       loadPostsError: null,
+      loadPostLoading: false,
+      loadPostDone: false,
+      loadPostError: null,
       uploadImageLoading: false,
       uploadImageDone: false,
       uploadImageError: null,
@@ -71,6 +74,10 @@ export const UNLIKE_POST_FAILURE = 'unlike_post_failure'
 export const LOAD_POSTS_REQUEST = 'load_posts_request'
 export const LOAD_POSTS_SUCCESS = 'load_posts_success'
 export const LOAD_POSTS_FAILURE = 'load_posts_failure'
+
+export const LOAD_POST_REQUEST = 'load_post_request'
+export const LOAD_POST_SUCCESS = 'load_post_success'
+export const LOAD_POST_FAILURE = 'load_post_failure'
 
 export const ADD_POST_REQUEST = 'add_post_request'
 export const ADD_POST_SUCCESS = 'add_post_success'
@@ -222,6 +229,20 @@ const reducer = (state = initialState, action ) => produce(state, (draft) => {
       case LOAD_POSTS_FAILURE : 
       draft.loadPostsLoading = false;
       draft.loadPostsError = action.error;
+        break;
+      case LOAD_POST_REQUEST : 
+      draft.loadPostLoading = true;
+      draft.loadPostDone = false;
+      draft.loadPostError = null
+        break
+      case LOAD_POST_SUCCESS : 
+      draft.singlePost = action.data
+      draft.loadPostLoading = false;
+      draft.loadPostDone = true;
+        break
+      case LOAD_POST_FAILURE : 
+      draft.loadPostLoading = false;
+      draft.loadPostError = action.error;
         break;
       default: 
         break;

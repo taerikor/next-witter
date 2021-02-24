@@ -140,6 +140,40 @@ Router.post(`/:postId/retweet`,isLoggedIn, async (req, res, next) => {
     }
 })
 
+Router.get(`/:postId`, async (req, res, next) => {
+    try{
+        const post = await Post.findOne({where: { id: req.params.postId }})
+        if(!post){
+            return res.status(403).send(`This post doesn't exist`)
+        }
+
+        const fullPost = await Post.findOne({
+            where: { id: req.params.postId },
+            include: [{
+              model: User,
+              attributes: ['id', 'nickname'],
+            }, {
+              model: Image,
+            }, {
+              model: Comment,
+              include: [{
+                model: User,
+                attributes: ['id', 'nickname'],
+                order: [['createdAt', 'DESC']],
+              }],
+            }, {
+              model: User, // 좋아요 누른 사람
+              as: 'Likers',
+              attributes: ['id'],
+            }],
+          });
+        res.status(200).json(fullPost)
+    }catch(error) {
+        console.error(error)
+        next(error)
+    }
+})
+
 Router.post(`/:postId/comment`,isLoggedIn, async (req, res, next) => {
     try{
         const post = await Post.findOne({
