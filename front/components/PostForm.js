@@ -2,7 +2,7 @@ import { Button, Form, Input} from 'antd'
 import { useCallback, useEffect, useRef } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import useInput from '../hooks/useInput'
-import { addPost } from '../reducers/post'
+import { addPost, ADD_POST_REQUEST, REMOVE_IMAGE, UPLOAD_IMAGE_REQUEST } from '../reducers/post'
 
 
 const PostForm = () => {
@@ -13,8 +13,20 @@ const PostForm = () => {
     const [text,onTextChange,setText] = useInput('')
 
     const onSubmit = useCallback(()=>{
-        dispatch(addPost(text))
-    },[text])
+        if (!text || !text.trim()) {
+            return alert('type text');
+          }
+
+        const formData = new FormData();
+        imagePaths.forEach(path => {
+            formData.append('image', path)
+        })
+        formData.append('content', text)
+        dispatch({
+            type: ADD_POST_REQUEST,
+            data:formData
+        })
+    },[text, imagePaths])
 
     useEffect(()=> {
         if(addPostDone){
@@ -25,6 +37,23 @@ const PostForm = () => {
     const onUploadClick = useCallback(() => {
         imageInput.current.click()
     } ,[imageInput.current])
+
+    const onImagesChange = useCallback((e) => {
+        const imageFormData = new FormData();
+        [].forEach.call(e.target.files, (file) => {
+            imageFormData.append('image', file)
+        })
+        dispatch({
+            type:UPLOAD_IMAGE_REQUEST,
+            data:imageFormData
+        })
+    }, [])
+    const onRemove = useCallback((index) => () => {
+        dispatch({
+            type:REMOVE_IMAGE,
+            data:index
+        })
+    },[])
 
      return (
          <Form 
@@ -38,16 +67,16 @@ const PostForm = () => {
              placeholder='Type Twit'
              />
              <div>
-                 <input type='file' multiple hidden ref={imageInput} />
+                 <input type='file' name='image' multiple hidden ref={imageInput} onChange={onImagesChange} />
                  <Button onClick={onUploadClick}>Image Upload</Button>
                  <Button type='primary' style={{float:'right'}} htmlType='submit'>Twit</Button>
              </div>
              <div>
-                 {imagePaths.map((path) => (
+                 {imagePaths.map((path, i) => (
                      <div key={path} style={{ display: 'inline-block' }}>
-                         <img src={path} style={{ width:'200px'}} alt={path} />
+                         <img src={`http://localhost:5000/${path}`} style={{ width:'200px'}} alt={path} />
                          <div>
-                             <Button>Remove</Button>
+                             <Button onClick={onRemove(i)}>Remove</Button>
                          </div>
                      </div>
                  ))}

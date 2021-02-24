@@ -9,15 +9,21 @@ import { LOAD_MY_INFO_REQUEST } from '../reducers/user'
 
 const Home = () => {
     const { user} = useSelector(state => state.user)
-    const { mainPosts,hasMorePosts,loadPostsLoading } = useSelector(state => state.post)
+    const { mainPosts,hasMorePosts,loadPostsLoading,retweetError } = useSelector(state => state.post)
     const dispatch = useDispatch();
+
+    useEffect(() => {
+        if (retweetError) {
+          alert(retweetError);
+        }
+      }, [retweetError]);
 
     useEffect(() => {
         dispatch({
             type:LOAD_POSTS_REQUEST
         })
     },[])
-
+    
     useEffect(() => {
         dispatch({
             type:LOAD_MY_INFO_REQUEST
@@ -28,9 +34,11 @@ const Home = () => {
         const handleScroll = () => {
             if(window.scrollY + document.documentElement.clientHeight > document.documentElement.scrollHeight - 300){
                 if(hasMorePosts && !loadPostsLoading ){
-                    console.log('yes')
+                    const lastId = mainPosts[mainPosts.length -1 ]?.id
+                    console.log(lastId)
                     dispatch({
-                        type:LOAD_POSTS_REQUEST
+                        type:LOAD_POSTS_REQUEST,
+                        lastId
                     })
                 }
             }
@@ -41,7 +49,7 @@ const Home = () => {
         return () => {
             window.removeEventListener('scroll',handleScroll)
         }
-    }, [hasMorePosts, loadPostsLoading])
+    }, [hasMorePosts, loadPostsLoading,mainPosts])
 
 return <AppLayout>
      {user && <PostForm />}

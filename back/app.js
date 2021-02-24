@@ -3,6 +3,7 @@ const app = express()
 const db = require('./models')
 const cors = require('cors')
 const passport = require('passport')
+const path = require('path')
 
 const morgan = require('morgan')
 
@@ -26,6 +27,7 @@ app.use(cors({
     origin: 'http://localhost:3000',
     credentials:true
 }))
+app.use(express.static(path.join(__dirname, 'uploads')))
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 

@@ -1,12 +1,17 @@
 const express = require('express')
 const Router = express.Router()
+const { Op } = require('sequelize')
 
 const { Post, Comment, Image, User } = require('../models')
-const { isLoggedIn } = require('./middlewares')
 
 Router.get('/', async (req, res, next) => {
     try{
+      const where = {}
+      if(parseInt(req.query.lastId, 10)){
+        where.id = { [Op.lt]: parseInt(req.query.lastId, 10)}
+      }
       const posts = await Post.findAll({
+        where,
         limit: 10,
         order: [
           ['createdAt', 'DESC'],

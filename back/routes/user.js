@@ -124,4 +124,73 @@ Router.patch('/nickname', isLoggedIn, async(req, res, next) => {
     }
 })
 
+Router.patch('/:userId/follow', isLoggedIn, async(req, res, next) => {
+    try{
+       const user = await User.findOne({ where: { id: req.params.userId }})
+       if(!user){
+           return res.status(403).send('user not find')
+       }
+       await user.addFollowers(parseInt(req.user.id))
+        res.status(200).json({ UserId: parseInt(req.params.userId, 10)})
+    }catch(error){
+        console.error(error)
+        next(error)
+    }
+})
+Router.delete('/:userId/follow', isLoggedIn, async(req, res, next) => {
+    try{
+        const user = await User.findOne({ where:{id: req.params.userId}})
+        if(!user){
+            return res.status(403).send('user not find')
+        }
+        await user.removeFollowers(req.user.id)
+         res.status(200).json({ UserId: parseInt(req.params.userId, 10)})
+     }catch(error){
+         console.error(error)
+         next(error)
+     }
+})
+
+Router.get('/following', isLoggedIn, async(req, res, next) => {
+    try{
+        const user = await User.findOne({ where:{id: req.user.id}})
+        if(!user){
+            return res.status(403).send('user not find')
+        }
+        const following = await user.getFollowings();
+         res.status(200).json(following)
+     }catch(error){
+         console.error(error)
+         next(error)
+     }
+})
+
+Router.get('/follower', isLoggedIn, async(req, res, next) => {
+    try{
+        const user = await User.findOne({ where:{id: req.user.id}})
+        if(!user){
+            return res.status(403).send('user not find')
+        }
+        const follower = await user.getFollowers();
+         res.status(200).json(follower)
+     }catch(error){
+         console.error(error)
+         next(error)
+     }
+})
+
+Router.delete('/:userId/follower', isLoggedIn, async(req, res, next) => {
+    try{
+        const user = await User.findOne({ where:{id: req.params.userId}})
+        if(!user){
+            return res.status(403).send('user not find')
+        }
+        await user.removeFollowings(req.user.id)
+         res.status(200).json({ UserId: parseInt(req.params.userId, 10)})
+     }catch(error){
+         console.error(error)
+         next(error)
+     }
+})
+
 module.exports = Router;
