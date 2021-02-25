@@ -30,7 +30,7 @@ const Home = () => {
                     console.log(lastId)
                     dispatch({
                         type:LOAD_POSTS_REQUEST,
-                        lastId
+                        lastId,
                     })
                 }
             }

@@ -13,7 +13,12 @@ import {
     LOAD_FOLLOWING_FAILURE,
     LOAD_FOLLOWING_REQUEST,
     LOAD_FOLLOWING_SUCCESS,
+    LOAD_MY_INFO_FAILURE,
     LOAD_MY_INFO_REQUEST,
+    LOAD_MY_INFO_SUCCESS,
+    LOAD_USER_FAILURE,
+    LOAD_USER_REQUEST,
+    LOAD_USER_SUCCESS,
 LOG_IN_FAILURE,
 LOG_IN_REQUEST,
 LOG_IN_SUCCESS,
@@ -77,13 +82,33 @@ function* loadMyInfo(action) {
     try{
         const result = yield call(loadMyInfoApi);
         yield put({
-            type:LOG_IN_SUCCESS,
+            type:LOAD_MY_INFO_SUCCESS,
             data: result.data,
         });
     }catch (err){
         console.log(err)
         yield put({
-            type:LOG_IN_FAILURE,
+            type:LOAD_MY_INFO_FAILURE,
+            error: err.response.data
+        })
+    }
+}
+
+function loadUserApi (data) {
+    return axios.get(`/user/${data}`)
+}
+
+function* loadUser(action) {
+    try{
+        const result = yield call(loadUserApi, action.data);
+        yield put({
+            type:LOAD_USER_SUCCESS,
+            data: result.data,
+        });
+    }catch (err){
+        console.log(err)
+        yield put({
+            type:LOAD_USER_FAILURE,
             error: err.response.data
         })
     }
@@ -268,6 +293,10 @@ function* watchLoadMyInfo() {
     yield takeLatest(LOAD_MY_INFO_REQUEST, loadMyInfo)
 }
 
+function* watchLoadUser() {
+    yield takeLatest(LOAD_USER_REQUEST, loadUser)
+}
+
 export default function* userSaga() {
     yield all([
         fork(watchUnfollower),
@@ -279,6 +308,7 @@ export default function* userSaga() {
         fork(watchLogOut),
         fork(watchSignUp),
         fork(watchChangeNickname),
-        fork(watchLoadMyInfo)
+        fork(watchLoadMyInfo),
+        fork(watchLoadUser),
     ])
 }

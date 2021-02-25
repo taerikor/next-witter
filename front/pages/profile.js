@@ -1,6 +1,6 @@
 import axios from 'axios'
 import Router from 'next/router'
-import React, { useEffect } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { END } from 'redux-saga'
 import AppLayout from '../components/AppLayout'
@@ -8,10 +8,16 @@ import FollowList from '../components/FollowList'
 import NicknameEditForm from '../components/NicknameEditForm'
 import { LOAD_FOLLOWER_REQUEST, LOAD_FOLLOWING_REQUEST, LOAD_MY_INFO_REQUEST } from '../reducers/user'
 import wrapper from '../store/configureStore'
+import useSWR from 'swr'
+
+const fetcher = (url) => axios.get(url, {withCredentials: true }).then(result => result.data)
 
 function profile() {
     const { user } = useSelector(state => state.user)
-    const dispatch = useDispatch()
+    const [ followingsLimit, setFollowingsLimit ] =useState(3)
+    const [ followersLimit, setFollowersLimit ] =useState(3)
+    const { data: followingsData , error: followingError } =useSWR(`http://localhost:5000/user/following?limit=${followingsLimit}`,fetcher)
+    const { data: followersData , error: followerError } =useSWR(`http://localhost:5000/user/follower?limit=${followersLimit}`,fetcher)
 
     useEffect(()=>{
         if(!user){
@@ -19,24 +25,24 @@ function profile() {
         }
     },[user])
 
-    useEffect(() => { 
-        dispatch({
-            type:LOAD_FOLLOWING_REQUEST
-        })
-        dispatch({
-            type:LOAD_FOLLOWER_REQUEST
-        })
+    const loadMoreFollowers = useCallback(() => {
+        setFollowersLimit(prev => prev + 3)
     },[])
-    
+
+    const loadMoreFollowings = useCallback(() => {
+        setFollowingsLimit(prev => prev + 3)
+    },[])
+
+
     if(!user){
-        return null
+        return <h1>Loading..</h1>
     }
 
     return (
         <AppLayout>
             <NicknameEditForm />
-            <FollowList header='Following' data={user.Followings} />
-            <FollowList header='Follower' data={user.Followers} />
+            <FollowList header='Following' data={followingsData} onClickMore={loadMoreFollowings} loading={!followingsData && !followingError} />
+            <FollowList header='Follower' data={followersData} onClickMore={loadMoreFollowers} loading={!followersData && !followerError}/>
         </AppLayout>
     )
 }

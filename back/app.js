@@ -48,10 +48,13 @@ app.get('/', (req, res) => {
 const postsRouter = require('./routes/posts')
 const postRouter = require('./routes/post')
 const userRouter = require('./routes/user')
+const hashtagRouter = require('./routes/hashtag')
 
 app.use('/posts',postsRouter )
 app.use('/post',postRouter )
 app.use('/user',userRouter )
+app.use('/hashtag',hashtagRouter )
+
 
 const port = 5000
 app.listen(port, () => {console.log(`connected Port : ${port}`)})
