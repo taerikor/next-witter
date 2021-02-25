@@ -1,6 +1,5 @@
 import shortId from 'shortid'
 import produce from 'immer'
-import faker from 'faker'
 
 const  initialState = {
       mainPosts: [],
@@ -34,25 +33,6 @@ const  initialState = {
       retweetError: null,
       hasMorePosts:true,
 }
-
-  export const generateDummyPost = (number) => Array(number).fill().map(() => ({
-    id: shortId.generate(),
-    User: {
-      id: shortId.generate(),
-      nickname: faker.name.findName(),
-    },
-    content: faker.lorem.paragraph(),
-    Images: [{
-      src: faker.image.image(),
-    }],
-    Comments: [{
-      User: {
-        id: shortId.generate(),
-        nickname: faker.name.findName(),
-      },
-      content: faker.lorem.sentence(),
-    }],
-  }));
 
 // types
 export const RETWEET_REQUEST = 'retweet_request'

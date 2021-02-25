@@ -9,6 +9,8 @@ import CommentForm from './CommentForm'
 import PostCardContent from './PostCardContent'
 import { LIKE_POST_REQUEST, REMOVE_POST_REQUEST, RETWEET_REQUEST, UNLIKE_POST_REQUEST } from '../reducers/post'
 import FollowButton from './FollowButton'
+import Link from 'next/link'
+import moment from 'moment'
 
 
 const PostCard = ({post}) => {
@@ -97,19 +99,23 @@ const PostCard = ({post}) => {
             <Card
               cover={post.Retweet.Images[0] && <PostImages images={post.Retweet.Images} />}
             >
+                <span style={{ float:'right'}}>{moment(post.createdAt).startOf('hour').fromNow() || moment(post.createdAt).endOf('day').fromNow() }</span>
               <Card.Meta
-                avatar={<Avatar>{post.Retweet.User.nickname[0]}</Avatar>}
+                avatar={<Avatar><Link href={`/user/${post.Retweet.User.id}`} ><a>{post.Retweet.User.nickname[0]}</a></Link></Avatar>}
                 title={post.Retweet.User.nickname}
                 description={<PostCardContent postData={post.Retweet.content} />}
               />
             </Card>
           )
           : (
+              <>
+            <span style={{ float:'right'}}>{moment(post.createdAt).startOf('hour').fromNow() || moment(post.createdAt).endOf('day').fromNow() }</span>
             <Card.Meta
-              avatar={<Avatar>{post.User.nickname[0]}</Avatar>}
+              avatar={<Avatar><Link href={`/user/${post.User.id}`} ><a>{post.User.nickname[0]}</a></Link></Avatar>}
               title={post.User.nickname}
               description={<PostCardContent postData={post.content} />}
             />
+            </>
           )}
         </Card>
         {toggleComment && (
@@ -123,15 +129,14 @@ const PostCard = ({post}) => {
                 <li>
                     <Comment 
                     author={item.User.nickname}
-                    avatar={<Avatar>{item.User.nickname[0]}</Avatar>}
+                    avatar={<Avatar><Link href={`/user/${item.User.id}`} ><a>{item.User.nickname[0]}</a></Link></Avatar>}
                     content={item.content}
                     />
                 </li>
             )}
             />
             </div>)}
-        {/* <CommentForm />
-        <Comments /> */}
+
     </div>
     )
 }

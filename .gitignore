@@ -1,4 +1,5 @@
 node_modules
 .next
 .env
-/back/uploads
+/back/uploads/
+/front/build/
