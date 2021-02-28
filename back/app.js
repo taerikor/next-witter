@@ -1,32 +1,36 @@
 const express = require('express')
 const app = express()
 const db = require('./models')
-const cors = require('cors')
-const passport = require('passport')
 const path = require('path')
 
+const cors = require('cors')
+
 const morgan = require('morgan')
+const dotenv = require('dotenv')
+
+const passport = require('passport')
+const passportConfig = require('./passport')
 
 const session = require('express-session')
 const cookieParser = require('cookie-parser')
-const dotenv = require('dotenv')
 
-const passportConfig = require('./passport')
+
 
 dotenv.config();
+passportConfig();
+
 db.sequelize.sync()
     .then(() => {
         console.log('db Connected Success')
     })
     .catch(console.error)
 
-passportConfig();
 app.use(morgan('dev'));
-
 app.use(cors({
     origin: 'http://localhost:3000',
     credentials:true
 }))
+
 app.use(express.static(path.join(__dirname, 'uploads')))
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
@@ -40,10 +44,6 @@ app.use(session({
 
 app.use(passport.initialize());
 app.use(passport.session());
-
-app.get('/', (req, res) => {
-    res.send('hello world!!!')
-})
 
 const postsRouter = require('./routes/posts')
 const postRouter = require('./routes/post')
