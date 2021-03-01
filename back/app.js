@@ -56,5 +56,5 @@ app.use('/user',userRouter )
 app.use('/hashtag',hashtagRouter )
 
 
-const port = 5000
+const port = 80
 app.listen(port, () => {console.log(`connected Port : ${port}`)})
