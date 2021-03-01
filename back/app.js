@@ -34,7 +34,7 @@ db.sequelize.sync()
         app.use(morgan('dev'));
     }
 
-    const frontUrl = 'http://172.31.40.76'
+    const frontUrl = 'http://13.124.190.137'
 
 app.use(cors({
     origin: ['http://localhost:3000',frontUrl],
