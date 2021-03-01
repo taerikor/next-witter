@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "next",
     "build": "cross-env NODE_ENV=production ANALYZE=true next build",
-    "start": "cross-env NODE_ENV=production next start"
+    "start": "cross-env NODE_ENV=production next start -p 80"
   },
   "author": "taerikor",
   "license": "ISC",
@@ -21,6 +21,7 @@
     "moment": "^2.29.1",
     "next": "^9.5.5",
     "next-redux-wrapper": "^6.0.2",
+    "pm2": "^4.5.5",
     "prop-types": "^15.7.2",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",

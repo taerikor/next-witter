@@ -17,7 +17,6 @@ const session = require('express-session')
 const cookieParser = require('cookie-parser')
 
 
-
 dotenv.config();
 passportConfig();
 
@@ -35,8 +34,10 @@ db.sequelize.sync()
         app.use(morgan('dev'));
     }
 
+    const frontUrl = 'http://172.31.40.76'
+
 app.use(cors({
-    origin: 'http://localhost:3000',
+    origin: ['http://localhost:3000',frontUrl],
     credentials:true
 }))
 
