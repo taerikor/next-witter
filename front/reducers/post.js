@@ -1,4 +1,3 @@
-import shortId from 'shortid'
 import produce from 'immer'
 
 const  initialState = {
