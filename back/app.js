@@ -5,6 +5,8 @@ const path = require('path')
 
 const cors = require('cors')
 
+const helmet = require('helmet')
+const hpp = require('hpp')
 const morgan = require('morgan')
 const dotenv = require('dotenv')
 
@@ -25,7 +27,14 @@ db.sequelize.sync()
     })
     .catch(console.error)
 
-app.use(morgan('dev'));
+    if(process.env.NODE_ENV === 'production'){
+        app.use(morgan('combined'));
+        app.use(helmet());
+        app.use(hpp());
+    }else{
+        app.use(morgan('dev'));
+    }
+
 app.use(cors({
     origin: 'http://localhost:3000',
     credentials:true
