@@ -1,8 +1,7 @@
-import React from "react";
+import type { NextPage } from "next";
 import AppLayout from "../components/AppLayout";
 
-interface IHome {}
-const Home = (): JSX.Element => {
+const Home: NextPage = () => {
   return (
     <AppLayout>
       <div>Home</div>

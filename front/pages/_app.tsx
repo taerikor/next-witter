@@ -1,20 +1,8 @@
-import React from 'react'
-import PropTypes from 'prop-types'
-import Head from 'next/head'
+import "../styles/globals.css";
+import type { AppProps } from "next/app";
 
-const App = ({Component}) => {
-    return(
-        <>
-        <Head>
-            Twitter
-        </Head>
-        <Component />
-        </>
-    )
+function MyApp({ Component, pageProps }: AppProps) {
+  return <Component {...pageProps} />;
 }
 
-App.propTypes = {
-    Component: PropTypes.elementType.isRequired
-}
-
-export default App;
+export default MyApp;

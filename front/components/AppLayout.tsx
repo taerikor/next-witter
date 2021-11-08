@@ -1,9 +1,26 @@
 import React from "react";
+import Link from "next/link";
+import { NextPage } from "next";
 
-const AppLayout = ({ children }) => {
+interface AppLayoutProps {
+  children: React.ReactNode;
+}
+
+const AppLayout: NextPage<AppLayoutProps> = ({ children }) => {
   return (
     <div>
-      <span>Header</span>
+      <Link href="/">
+        <a>Home</a>
+      </Link>
+      <Link href="/signin">
+        <a>Sign In</a>
+      </Link>
+      <Link href="/signup">
+        <a>Sign Up</a>
+      </Link>
+      <Link href="/profile">
+        <a>Profile</a>
+      </Link>
       {children}
     </div>
   );
