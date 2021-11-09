@@ -8,7 +8,6 @@ const Wrapper = styled.div`
   align-items: center;
   height: 100vh;
   background-color: #0e1c48;
-  color: white;
 `;
 
 const AuthLayout = ({ children }) => {
