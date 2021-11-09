@@ -1,6 +1,7 @@
 import React from "react";
-import Link from "next/link";
 import { NextPage } from "next";
+import PrimarySearchAppBar from "./AppBar";
+import { Grid } from "@mui/material";
 
 interface AppLayoutProps {
   children: React.ReactNode;
@@ -9,19 +10,18 @@ interface AppLayoutProps {
 const AppLayout: NextPage<AppLayoutProps> = ({ children }) => {
   return (
     <div>
-      <Link href="/">
-        <a>Home</a>
-      </Link>
-      <Link href="/signin">
-        <a>Sign In</a>
-      </Link>
-      <Link href="/signup">
-        <a>Sign Up</a>
-      </Link>
-      <Link href="/profile">
-        <a>Profile</a>
-      </Link>
-      {children}
+      <PrimarySearchAppBar />
+      <Grid container spacing={2}>
+        <Grid item xs={12} md={4}>
+          <p>Left</p>
+        </Grid>
+        <Grid item xs={12} md={4}>
+          {children}
+        </Grid>
+        <Grid item xs={12} md={4}>
+          <p>right</p>
+        </Grid>
+      </Grid>
     </div>
   );
 };
