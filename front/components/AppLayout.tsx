@@ -17,13 +17,13 @@ const AppLayout: NextPage<AppLayoutProps> = ({ children }) => {
       />
       <Grid container spacing={2}>
         <Grid item xs={12} md={4}>
-          <p>Left</p>
+          <h2>Left</h2>
         </Grid>
         <Grid item xs={12} md={4}>
           {children}
         </Grid>
         <Grid item xs={12} md={4}>
-          <p>right</p>
+          <h2>Right</h2>
         </Grid>
       </Grid>
     </div>

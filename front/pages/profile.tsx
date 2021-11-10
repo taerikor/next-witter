@@ -1,6 +1,15 @@
 import React from "react";
 import AppLayout from "../components/AppLayout";
 import Head from "next/head";
+import {
+  FormControl,
+  IconButton,
+  InputAdornment,
+  InputLabel,
+  OutlinedInput,
+} from "@mui/material";
+import SearchIcon from "@mui/icons-material/Search";
+import FollowList from "../components/FollowList";
 
 const Profile = () => {
   return (
@@ -8,7 +17,21 @@ const Profile = () => {
       <Head>
         <title>Nextwitte | Profile</title>
       </Head>
-      <div>Profile</div>
+      <FormControl sx={{ m: 1, width: "100%" }} variant="outlined">
+        <InputLabel>Search</InputLabel>
+        <OutlinedInput
+          type="text"
+          endAdornment={
+            <InputAdornment position="end">
+              <IconButton edge="end">
+                <SearchIcon />
+              </IconButton>
+            </InputAdornment>
+          }
+        />
+      </FormControl>
+      <FollowList title="Following" />
+      <FollowList title="Follower" />
     </AppLayout>
   );
 };
