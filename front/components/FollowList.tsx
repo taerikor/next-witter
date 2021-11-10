@@ -50,10 +50,7 @@ const FollowList: React.FunctionComponent<FollowListProps> = ({ title }) => {
                   <PersonIcon />
                 </Avatar>
               </ListItemAvatar>
-              <ListItemText
-                primary="Single-line item"
-                // secondary={secondary ? 'Secondary text' : null}
-              />
+              <ListItemText primary="Single-line item" />
             </ListItem>
           )}
           <Button>Load More</Button>

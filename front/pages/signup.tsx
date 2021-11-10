@@ -1,10 +1,11 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import Head from "next/head";
 import { Button, TextField } from "@mui/material";
 import AuthLayout from "../components/AuthLayout";
 import { Form, InputWrapper } from "./signin";
 import { makeStyles } from "@mui/styles";
+import useInput from "../utils/useInput";
 
 const useStyles = makeStyles({
   input: {
@@ -12,16 +13,20 @@ const useStyles = makeStyles({
   },
 });
 const Signup = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const onInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = event.target;
-    if (name === "email") {
-      setEmail(value);
-    } else if (name === "password") {
-      setPassword(value);
+  const [email, onEmailChange, setEmail] = useInput("");
+  const [password, onPasswordChange, setPassword] = useInput("");
+  const [name, onNameChange, setName] = useInput("");
+  const [confirmPassword, onComfirmPasswordChange, setComfirmPassword] =
+    useInput("");
+  const [passwordError, setPasswordError] = useState(true);
+
+  useEffect(() => {
+    if (password === confirmPassword) {
+      setPasswordError(false);
+    } else {
+      setPasswordError(true);
     }
-  };
+  }, [password, confirmPassword]);
 
   const onSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -42,9 +47,17 @@ const Signup = () => {
             label="Email"
             autoComplete="current-email"
             type="email"
-            name="email"
             value={email}
-            onChange={onInputChange}
+            onChange={onEmailChange}
+            className={classes.input}
+          />
+          <TextField
+            id="outlined-name-input"
+            label="Name"
+            autoComplete="current-name"
+            type="text"
+            value={name}
+            onChange={onNameChange}
             className={classes.input}
           />
           <TextField
@@ -52,10 +65,17 @@ const Signup = () => {
             label="Password"
             autoComplete="current-password"
             type="password"
-            color="warning"
-            name="password"
             value={password}
-            onChange={onInputChange}
+            onChange={onPasswordChange}
+            className={classes.input}
+          />
+          <TextField
+            id="outlined-confirm-password-input"
+            label="Confirm Password"
+            type="password"
+            color={passwordError ? "warning" : "success"}
+            value={confirmPassword}
+            onChange={onComfirmPasswordChange}
             className={classes.input}
           />
           <Link href="/signin">
