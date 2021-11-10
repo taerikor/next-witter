@@ -7,6 +7,7 @@ import AuthLayout from "../components/AuthLayout";
 import { NextPage } from "next";
 import useInput from "../utils/useInput";
 import { makeStyles } from "@mui/styles";
+import { useRouter } from "next/dist/client/router";
 
 export const Form = styled.form`
   display: flex;
@@ -30,20 +31,15 @@ const useStyles = makeStyles({
   },
 });
 
-const Signin: NextPage = () => {
+const Signin: NextPage = (props) => {
   const [email, onEmailChange, setEmail] = useInput("");
   const [password, onPasswordChange, setPassword] = useInput("");
-  const onInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = event.target;
-    if (name === "email") {
-      setEmail(value);
-    } else if (name === "password") {
-      setPassword(value);
-    }
-  };
+
+  const router = useRouter();
 
   const onSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    router.push("/");
   };
   const classes = useStyles();
   return (

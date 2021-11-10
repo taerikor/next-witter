@@ -17,6 +17,8 @@ import MailIcon from "@mui/icons-material/Mail";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import MoreIcon from "@mui/icons-material/MoreVert";
 
+import styledComponent from "styled-components";
+
 import Link from "next/link";
 
 const Search = styled("div")(({ theme }) => ({
@@ -59,7 +61,19 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
   },
 }));
 
-export default function PrimarySearchAppBar() {
+const LinkWrapper = styledComponent.a`
+  text-align: center;
+`;
+
+interface AppBarProps {
+  isLoggedIn: boolean;
+  setIsLoggedIn: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+const PrimarySearchAppBar: React.FunctionComponent<AppBarProps> = ({
+  isLoggedIn,
+  setIsLoggedIn,
+}) => {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] =
     React.useState<null | HTMLElement>(null);
@@ -84,6 +98,10 @@ export default function PrimarySearchAppBar() {
     setMobileMoreAnchorEl(event.currentTarget);
   };
 
+  const onLogoutClick = () => {
+    setIsLoggedIn(false);
+  };
+
   const menuId = "primary-search-account-menu";
   const renderMenu = (
     <Menu
@@ -101,8 +119,16 @@ export default function PrimarySearchAppBar() {
       open={isMenuOpen}
       onClose={handleMenuClose}
     >
-      <MenuItem onClick={handleMenuClose}>Profile</MenuItem>
-      <MenuItem onClick={handleMenuClose}>My account</MenuItem>
+      <MenuItem onClick={handleMenuClose}>
+        <Button>
+          <Link href="/profile">
+            <a>Profile</a>
+          </Link>
+        </Button>
+      </MenuItem>
+      <MenuItem onClick={handleMenuClose}>
+        <Button onClick={onLogoutClick}>Logout</Button>
+      </MenuItem>
     </Menu>
   );
 
@@ -123,60 +149,63 @@ export default function PrimarySearchAppBar() {
       open={isMobileMenuOpen}
       onClose={handleMobileMenuClose}
     >
-      <MenuItem>
-        <Button size="large" aria-label="show 4 new mails" color="inherit">
-          <Link href="/signin">
-            <a>Sign In</a>
-          </Link>
-        </Button>
-      </MenuItem>
-      <MenuItem>
-        <Button size="large" aria-label="show 4 new mails" color="inherit">
-          <Link href="/signup">
-            <a>Sign Up</a>
-          </Link>
-        </Button>
-      </MenuItem>
-      <MenuItem>
-        <Button size="large" aria-label="show 4 new mails" color="inherit">
-          <Link href="/profile">
-            <a>Profile</a>
-          </Link>
-        </Button>
-      </MenuItem>
-      {/* <MenuItem>
-        <IconButton size="large" aria-label="show 4 new mails" color="inherit">
-          <Badge badgeContent={4} color="error">
-            <MailIcon />
-          </Badge>
-        </IconButton>
-        <p>Messages</p> 
-      </MenuItem>
-      {/* 
-      <MenuItem>
-        <IconButton
-          size="large"
-          aria-label="show 17 new notifications"
-          color="inherit"
-        >
-          <Badge badgeContent={17} color="error">
-            <NotificationsIcon />
-          </Badge>
-        </IconButton>
-        <p>Notifications</p>
-      </MenuItem>
-      <MenuItem onClick={handleProfileMenuOpen}>
-        <IconButton
-          size="large"
-          aria-label="account of current user"
-          aria-controls="primary-search-account-menu"
-          aria-haspopup="true"
-          color="inherit"
-        >
-          <AccountCircle />
-        </IconButton>
-        <p>Profile</p>
-      </MenuItem> */}
+      {isLoggedIn ? (
+        <div>
+          <MenuItem>
+            <IconButton
+              size="large"
+              aria-label="show 4 new mails"
+              color="inherit"
+            >
+              <Badge badgeContent={4} color="error">
+                <MailIcon />
+              </Badge>
+            </IconButton>
+            <p>Messages</p>
+          </MenuItem>
+          <MenuItem>
+            <IconButton
+              size="large"
+              aria-label="show 17 new notifications"
+              color="inherit"
+            >
+              <Badge badgeContent={17} color="error">
+                <NotificationsIcon />
+              </Badge>
+            </IconButton>
+            <p>Notifications</p>
+          </MenuItem>
+          <MenuItem onClick={handleProfileMenuOpen}>
+            <IconButton
+              size="large"
+              aria-label="account of current user"
+              aria-controls="primary-search-account-menu"
+              aria-haspopup="true"
+              color="inherit"
+            >
+              <AccountCircle />
+            </IconButton>
+            <p>Profile</p>
+          </MenuItem>
+        </div>
+      ) : (
+        <div>
+          <MenuItem>
+            <Button size="large" aria-label="show 4 new mails" color="inherit">
+              <Link href="/signin">
+                <a>Sign In</a>
+              </Link>
+            </Button>
+          </MenuItem>
+          <MenuItem>
+            <Button size="large" aria-label="show 4 new mails" color="inherit">
+              <Link href="/signup">
+                <a>Sign Up</a>
+              </Link>
+            </Button>
+          </MenuItem>
+        </div>
+      )}
     </Menu>
   );
 
@@ -212,52 +241,60 @@ export default function PrimarySearchAppBar() {
           </Search>
           <Box sx={{ flexGrow: 1 }} />
           <Box sx={{ display: { xs: "none", md: "flex" } }}>
-            <Button size="large" aria-label="show 4 new mails" color="inherit">
-              <Link href="/signin">
-                <a>Sign In</a>
-              </Link>
-            </Button>
-            <Button size="large" aria-label="show 4 new mails" color="inherit">
-              <Link href="/signup">
-                <a>Sign up</a>
-              </Link>
-            </Button>
-            <Button size="large" aria-label="show 4 new mails" color="inherit">
-              <Link href="/profile">
-                <a>Profile</a>
-              </Link>
-            </Button>
-
-            {/* <IconButton
-              size="large"
-              aria-label="show 4 new mails"
-              color="inherit"
-            >
-              <Badge badgeContent={4} color="error">
-                <MailIcon />
-              </Badge>
-            </IconButton>
-            <IconButton
-              size="large"
-              aria-label="show 17 new notifications"
-              color="inherit"
-            >
-              <Badge badgeContent={17} color="error">
-                <NotificationsIcon />
-              </Badge>
-            </IconButton>
-            <IconButton
-              size="large"
-              edge="end"
-              aria-label="account of current user"
-              aria-controls={menuId}
-              aria-haspopup="true"
-              onClick={handleProfileMenuOpen}
-              color="inherit"
-            >
-              <AccountCircle />
-            </IconButton>
-                      */}
+            {isLoggedIn ? (
+              <div>
+                <IconButton
+                  size="large"
+                  aria-label="show 4 new mails"
+                  color="inherit"
+                >
+                  <Badge badgeContent={4} color="error">
+                    <MailIcon />
+                  </Badge>
+                </IconButton>
+                <IconButton
+                  size="large"
+                  aria-label="show 17 new notifications"
+                  color="inherit"
+                >
+                  <Badge badgeContent={17} color="error">
+                    <NotificationsIcon />
+                  </Badge>
+                </IconButton>
+                <IconButton
+                  size="large"
+                  edge="end"
+                  aria-label="account of current user"
+                  aria-controls={menuId}
+                  aria-haspopup="true"
+                  onClick={handleProfileMenuOpen}
+                  color="inherit"
+                >
+                  <AccountCircle />
+                </IconButton>
+              </div>
+            ) : (
+              <div>
+                <Button
+                  size="large"
+                  aria-label="show 4 new mails"
+                  color="inherit"
+                >
+                  <Link href="/signin">
+                    <a>Sign In</a>
+                  </Link>
+                </Button>
+                <Button
+                  size="large"
+                  aria-label="show 4 new mails"
+                  color="inherit"
+                >
+                  <Link href="/signup">
+                    <a>Sign up</a>
+                  </Link>
+                </Button>
+              </div>
+            )}
           </Box>
           <Box sx={{ display: { xs: "flex", md: "none" } }}>
             <IconButton
@@ -277,4 +314,6 @@ export default function PrimarySearchAppBar() {
       {renderMenu}
     </Box>
   );
-}
+};
+
+export default PrimarySearchAppBar;
