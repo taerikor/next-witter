@@ -8,6 +8,8 @@ import { NextPage } from "next";
 import useInput from "../utils/useInput";
 import { makeStyles } from "@mui/styles";
 import { useRouter } from "next/dist/client/router";
+import { useDispatch } from "react-redux";
+import { loginAction } from "../reducer/user";
 
 export const Form = styled.form`
   display: flex;
@@ -31,14 +33,21 @@ const useStyles = makeStyles({
   },
 });
 
-const Signin: NextPage = (props) => {
+const Signin: NextPage = () => {
   const [email, onEmailChange, setEmail] = useInput("");
   const [password, onPasswordChange, setPassword] = useInput("");
+  const dispatch = useDispatch();
 
   const router = useRouter();
 
   const onSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    dispatch(
+      loginAction({
+        email,
+        password,
+      })
+    );
     router.push("/");
   };
   const classes = useStyles();

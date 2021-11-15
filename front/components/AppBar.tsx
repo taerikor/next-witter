@@ -20,6 +20,8 @@ import MoreIcon from "@mui/icons-material/MoreVert";
 import styledComponent from "styled-components";
 
 import Link from "next/link";
+import { useDispatch } from "react-redux";
+import { logoutAction } from "../reducer/user";
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
@@ -67,12 +69,10 @@ const LinkWrapper = styledComponent.a`
 
 interface AppBarProps {
   isLoggedIn: boolean;
-  setIsLoggedIn: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const PrimarySearchAppBar: React.FunctionComponent<AppBarProps> = ({
   isLoggedIn,
-  setIsLoggedIn,
 }) => {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] =
@@ -98,8 +98,9 @@ const PrimarySearchAppBar: React.FunctionComponent<AppBarProps> = ({
     setMobileMoreAnchorEl(event.currentTarget);
   };
 
+  const dispatch = useDispatch();
   const onLogoutClick = () => {
-    setIsLoggedIn(false);
+    dispatch(logoutAction());
   };
 
   const menuId = "primary-search-account-menu";
