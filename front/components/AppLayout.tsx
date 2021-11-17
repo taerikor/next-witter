@@ -11,7 +11,6 @@ interface AppLayoutProps {
 
 const AppLayout: NextPage<AppLayoutProps> = ({ children }) => {
   const isLoggedIn = useSelector((state: RootState) => state.user.isLoggedIn);
-  console.log(isLoggedIn);
   return (
     <div>
       <PrimarySearchAppBar isLoggedIn={isLoggedIn} />
