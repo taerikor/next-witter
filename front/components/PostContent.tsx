@@ -7,7 +7,7 @@ interface PostContentProps {
   content: string;
 }
 
-const Hashtag = styled(Link)`
+export const StyledLink = styled(Link)`
   cursor: pointer;
 `;
 
@@ -15,18 +15,18 @@ const PostContent: React.FunctionComponent<PostContentProps> = ({
   content,
 }) => {
   return (
-    <div>
+    <>
       {content.split(/(#[^\s#]+)/g).map((text, i) => {
         if (text.match(/(#[^\s#]+)/)) {
           return (
-            <NextLink href={`/hashtag/${text.slice(1)}`}>
-              <Hashtag>{text}</Hashtag>
+            <NextLink passHref key={i} href={`/hashtag/${text.slice(1)}`}>
+              <StyledLink>{text}</StyledLink>
             </NextLink>
           );
         }
         return text;
       })}
-    </div>
+    </>
   );
 };
 

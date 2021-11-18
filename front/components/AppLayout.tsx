@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { NextPage } from "next";
-import PrimarySearchAppBar from "./AppBar";
+import PrimarySearchAppBar from "./NavBar/AppBar";
 import { Grid } from "@mui/material";
 import { useSelector } from "react-redux";
 import { RootState } from "../reducer";
@@ -15,13 +15,13 @@ const AppLayout: NextPage<AppLayoutProps> = ({ children }) => {
     <div>
       <PrimarySearchAppBar isLoggedIn={isLoggedIn} />
       <Grid container spacing={2}>
-        <Grid item xs={12} md={4}>
+        <Grid item xs={1} md={4}>
           <h2>Left</h2>
         </Grid>
-        <Grid item xs={12} md={4}>
+        <Grid item xs={10} md={4}>
           {children}
         </Grid>
-        <Grid item xs={12} md={4}>
+        <Grid item xs={1} md={4}>
           <h2>Right</h2>
         </Grid>
       </Grid>

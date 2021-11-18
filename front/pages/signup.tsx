@@ -6,6 +6,7 @@ import AuthLayout from "../components/AuthLayout";
 import { Form, InputWrapper } from "./signin";
 import { makeStyles } from "@mui/styles";
 import useInput from "../utils/useInput";
+import { StyledLink } from "../components/PostContent";
 
 const useStyles = makeStyles({
   input: {
@@ -78,8 +79,8 @@ const Signup = () => {
             onChange={onComfirmPasswordChange}
             className={classes.input}
           />
-          <Link href="/signin">
-            <a>이미 계정이 있으십니까?</a>
+          <Link href="/signin" passHref>
+            <StyledLink underline="hover">이미 계정이 있으십니까?</StyledLink>
           </Link>
         </InputWrapper>
         <Button type="submit" variant="contained">

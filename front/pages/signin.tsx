@@ -10,6 +10,7 @@ import { makeStyles } from "@mui/styles";
 import { useRouter } from "next/dist/client/router";
 import { useDispatch } from "react-redux";
 import { loginAction } from "../reducer/user";
+import { StyledLink } from "../components/PostContent";
 
 export const Form = styled.form`
   display: flex;
@@ -79,8 +80,8 @@ const Signin: NextPage = () => {
             onChange={onPasswordChange}
             className={classes.input}
           />
-          <Link href="/signup">
-            <a>아직 계정이 없으신가요?</a>
+          <Link href="/signup" passHref>
+            <StyledLink underline="hover">아직 계정이 없으신가요?</StyledLink>
           </Link>
         </InputWrapper>
         <Button type="submit" variant="contained">
