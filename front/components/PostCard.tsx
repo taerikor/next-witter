@@ -18,6 +18,7 @@ import ShareIcon from "@mui/icons-material/Share";
 import CommentIcon from "@mui/icons-material/Comment";
 import CommentForm from "./CommentForm";
 import Comment from "./Comment";
+import CardImage from "./CardImage";
 
 interface ExpandMoreProps extends IconButtonProps {
   expand: boolean;
@@ -39,8 +40,10 @@ export interface IComments {
   };
   content: string;
 }
-interface IImages {
+export interface IImages {
   src: string;
+  cols?: number;
+  rows?: number;
 }
 
 interface PostCardProps {
@@ -71,7 +74,7 @@ const PostCard: React.FunctionComponent<PostCardProps> = ({ post }) => {
 
   return (
     <div>
-      <Card sx={{ maxWidth: 345 }}>
+      <Card>
         <CardHeader
           avatar={
             <Avatar sx={{ bgcolor: "red" }} aria-label="recipe">
@@ -86,12 +89,12 @@ const PostCard: React.FunctionComponent<PostCardProps> = ({ post }) => {
           title={post.User.nickname}
           subheader="September 14, 2016"
         />
-        <CardMedia
+        {/* <CardMedia
           component="img"
-          height="194"
           image={post.Images[0]?.src}
           alt="Paella dish"
-        />
+        /> */}
+        <CardImage images={post.Images} />
         <CardContent>
           <Typography variant="body2" color="text.secondary">
             {post.content}

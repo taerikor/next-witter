@@ -1,4 +1,4 @@
-import { Button, TextField } from "@mui/material";
+import { Button, FormGroup, TextField } from "@mui/material";
 import type { NextPage } from "next";
 import { FormEvent, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -26,7 +26,7 @@ const Home: NextPage = () => {
   };
   return (
     <AppLayout>
-      <form onSubmit={onTweetSubmit}>
+      <FormGroup onSubmit={onTweetSubmit}>
         <TextField
           id="outlined-multiline-static"
           placeholder={`What's happening?`}
@@ -40,7 +40,7 @@ const Home: NextPage = () => {
           <Button onClick={onImageClick}>Image</Button>
           <Button type="submit">SEND</Button>
         </>
-      </form>
+      </FormGroup>
       {mainPosts.map((post) => (
         <PostCard key={post.id} post={post} />
       ))}

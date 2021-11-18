@@ -1,4 +1,4 @@
-import { Button, TextField } from "@mui/material";
+import { Button, TextField, FormControl, FormGroup } from "@mui/material";
 import React, { FormEvent } from "react";
 import useInput from "../utils/useInput";
 
@@ -16,13 +16,14 @@ const CommentForm = () => {
           id="outlined-multiline-static"
           placeholder={`What's happening?`}
           multiline
+          fullWidth
           rows={4}
           value={comment}
           onChange={onCommentChange}
         />
-        <>
+        <div>
           <Button type="submit">SEND</Button>
-        </>
+        </div>
       </form>
     </div>
   );
