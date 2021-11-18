@@ -21,6 +21,7 @@ import Comment from "./Comment";
 import CardImage from "./CardImage";
 
 import styledComp from "styled-components";
+import PostContent from "./PostContent";
 
 interface ExpandMoreProps extends IconButtonProps {
   expand: boolean;
@@ -95,7 +96,7 @@ const PostCard: React.FunctionComponent<PostCardProps> = ({ post }) => {
         />
         <CardContent>
           <Typography variant="body2" color="text.secondary">
-            {post.content}
+            <PostContent content={post.content} />
           </Typography>
         </CardContent>
         {post.Images[0] && <CardImage images={post.Images} />}
