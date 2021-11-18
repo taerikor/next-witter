@@ -17,12 +17,14 @@ const CommentForm = () => {
           placeholder={`What's happening?`}
           multiline
           fullWidth
-          rows={4}
+          rows={2}
           value={comment}
           onChange={onCommentChange}
         />
         <div>
-          <Button type="submit">SEND</Button>
+          <Button variant="contained" type="submit">
+            SEND
+          </Button>
         </div>
       </form>
     </div>

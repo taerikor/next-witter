@@ -5,10 +5,10 @@ import {
   CardActions,
   CardContent,
   CardHeader,
-  CardMedia,
   Collapse,
   IconButton,
   IconButtonProps,
+  List,
   Typography,
 } from "@mui/material";
 import React, { useState } from "react";
@@ -20,6 +20,8 @@ import CommentForm from "./CommentForm";
 import Comment from "./Comment";
 import CardImage from "./CardImage";
 
+import styledComp from "styled-components";
+
 interface ExpandMoreProps extends IconButtonProps {
   expand: boolean;
 }
@@ -27,12 +29,16 @@ interface ExpandMoreProps extends IconButtonProps {
 const ExpandMore = styled((props: ExpandMoreProps) => {
   const { expand, ...other } = props;
   return <IconButton {...other} />;
-})(({ theme, expand }) => ({
+})(({ theme }) => ({
   marginLeft: "auto",
   transition: theme.transitions.create("transform", {
     duration: theme.transitions.duration.shortest,
   }),
 }));
+
+const CardWrapper = styledComp.div`
+  margin: 10px 0;
+`;
 
 export interface IComments {
   User: {
@@ -42,8 +48,6 @@ export interface IComments {
 }
 export interface IImages {
   src: string;
-  cols?: number;
-  rows?: number;
 }
 
 interface PostCardProps {
@@ -73,7 +77,7 @@ const PostCard: React.FunctionComponent<PostCardProps> = ({ post }) => {
   };
 
   return (
-    <div>
+    <CardWrapper>
       <Card>
         <CardHeader
           avatar={
@@ -89,17 +93,12 @@ const PostCard: React.FunctionComponent<PostCardProps> = ({ post }) => {
           title={post.User.nickname}
           subheader="September 14, 2016"
         />
-        {/* <CardMedia
-          component="img"
-          image={post.Images[0]?.src}
-          alt="Paella dish"
-        /> */}
-        <CardImage images={post.Images} />
         <CardContent>
           <Typography variant="body2" color="text.secondary">
             {post.content}
           </Typography>
         </CardContent>
+        {post.Images[0] && <CardImage images={post.Images} />}
         <CardActions disableSpacing>
           <IconButton onClick={onLikeClick} aria-label="add to favorites">
             <FavoriteIcon color={isLike ? "warning" : "action"} />
@@ -119,12 +118,14 @@ const PostCard: React.FunctionComponent<PostCardProps> = ({ post }) => {
         </CardActions>
         <Collapse in={isOpenComment} timeout="auto" unmountOnExit>
           <CommentForm />
-          {post.Comments.map((comment, index) => (
-            <Comment key={index} comment={comment} />
-          ))}
+          <List sx={{ width: "100%", bgcolor: "background.paper" }}>
+            {post.Comments.map((comment, index) => (
+              <Comment key={index} comment={comment} />
+            ))}
+          </List>
         </Collapse>
       </Card>
-    </div>
+    </CardWrapper>
   );
 };
 

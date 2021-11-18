@@ -1,4 +1,4 @@
-import { Button, FormGroup, TextField } from "@mui/material";
+import { Avatar, Button, Divider, FormControl, TextField } from "@mui/material";
 import type { NextPage } from "next";
 import { FormEvent, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -7,6 +7,21 @@ import PostCard from "../components/PostCard";
 import { RootState } from "../reducer";
 import { addPostAction } from "../reducer/post";
 import useInput from "../utils/useInput";
+import styled from "styled-components";
+import { Box } from "@mui/system";
+
+const ButtonWrapper = styled.div`
+  display: flex;
+  justify-content: space-between;
+  margin-left: 40px;
+`;
+
+const FormWrapper = styled.form`
+  width: 100%;
+  border: 1px #66666636 solid;
+  padding: 10px 20px;
+  margin-top: 10px;
+`;
 
 const Home: NextPage = () => {
   const imageInput = useRef<HTMLInputElement>();
@@ -14,6 +29,7 @@ const Home: NextPage = () => {
 
   const dispatch = useDispatch();
   const { mainPosts } = useSelector((state: RootState) => state.post);
+  const { user } = useSelector((state: RootState) => state.user);
 
   const onImageClick = () => {
     imageInput.current.click();
@@ -26,21 +42,36 @@ const Home: NextPage = () => {
   };
   return (
     <AppLayout>
-      <FormGroup onSubmit={onTweetSubmit}>
-        <TextField
-          id="outlined-multiline-static"
-          placeholder={`What's happening?`}
-          multiline
-          rows={4}
-          value={tweet}
-          onChange={onTweetChange}
-        />
-        <>
-          <input type="file" ref={imageInput} hidden />
-          <Button onClick={onImageClick}>Image</Button>
-          <Button type="submit">SEND</Button>
-        </>
-      </FormGroup>
+      <FormWrapper onSubmit={onTweetSubmit}>
+        <FormControl fullWidth margin="dense">
+          <Box
+            sx={{ display: "flex", alignItems: "flex-start", width: "100%" }}
+          >
+            <Avatar
+              sx={{ bgcolor: "red", marginRight: "10px" }}
+              aria-label="recipe"
+            >
+              {"U"}
+            </Avatar>
+            <TextField
+              id="input-with-sx"
+              placeholder={`What's happening?`}
+              multiline
+              fullWidth
+              value={tweet}
+              onChange={onTweetChange}
+              variant="standard"
+            />
+          </Box>
+          <ButtonWrapper>
+            <input type="file" ref={imageInput} hidden />
+            <Button onClick={onImageClick}>Image</Button>
+            <Button variant="contained" type="submit">
+              SEND
+            </Button>
+          </ButtonWrapper>
+        </FormControl>
+      </FormWrapper>
       {mainPosts.map((post) => (
         <PostCard key={post.id} post={post} />
       ))}
