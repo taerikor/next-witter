@@ -7,11 +7,11 @@ import { RootState } from "../reducer";
 
 const Home: NextPage = () => {
   const { mainPosts } = useSelector((state: RootState) => state.post);
-  const { isLoggedIn } = useSelector((state: RootState) => state.user);
+  const { user } = useSelector((state: RootState) => state.user);
 
   return (
     <AppLayout>
-      {isLoggedIn && <TweetForm />}
+      {user && <TweetForm />}
       {mainPosts.map((post) => (
         <PostCard key={post.id} post={post} />
       ))}

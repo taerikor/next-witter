@@ -5,7 +5,7 @@ import { useDispatch } from "react-redux";
 import useInput from "../utils/useInput";
 import styled from "styled-components";
 import { Box } from "@mui/system";
-import { addPostAction } from "../reducer/post";
+import { addPostReqAction } from "../reducer/post";
 
 const ButtonWrapper = styled.div`
   display: flex;
@@ -32,7 +32,7 @@ const TweetForm = () => {
 
   const onTweetSubmit = (e: FormEvent) => {
     e.preventDefault();
-    dispatch(addPostAction());
+    dispatch(addPostReqAction());
     setTweet("");
   };
   return (

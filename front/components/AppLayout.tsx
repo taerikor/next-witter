@@ -10,10 +10,10 @@ interface AppLayoutProps {
 }
 
 const AppLayout: NextPage<AppLayoutProps> = ({ children }) => {
-  const isLoggedIn = useSelector((state: RootState) => state.user.isLoggedIn);
+  const { user } = useSelector((state: RootState) => state.user);
   return (
     <div>
-      <PrimarySearchAppBar isLoggedIn={isLoggedIn} />
+      <PrimarySearchAppBar isLoggedIn={user !== null ? true : false} />
       <Grid container spacing={2}>
         <Grid item xs={1} md={4}>
           <h2>Left</h2>

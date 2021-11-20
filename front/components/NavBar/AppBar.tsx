@@ -123,7 +123,7 @@ const PrimarySearchAppBar: React.FunctionComponent<AppBarProps> = ({
           </Box>
           <Box sx={{ display: { xs: "flex", md: "none" } }}>
             <IconButton
-              size="large"
+              size="medium"
               aria-label="show more"
               aria-controls={mobileMenuId}
               aria-haspopup="true"

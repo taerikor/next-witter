@@ -8,9 +8,11 @@ import { NextPage } from "next";
 import useInput from "../utils/useInput";
 import { makeStyles } from "@mui/styles";
 import { useRouter } from "next/dist/client/router";
-import { useDispatch } from "react-redux";
-import { loginAction } from "../reducer/user";
+import { useDispatch, useSelector } from "react-redux";
+import { loginReqAction } from "../reducer/user";
 import { StyledLink } from "../components/PostContent";
+import Progress from "../components/Progress";
+import { RootState } from "../reducer";
 
 export const Form = styled.form`
   display: flex;
@@ -38,22 +40,28 @@ const Signin: NextPage = () => {
   const [email, onEmailChange, setEmail] = useInput("");
   const [password, onPasswordChange, setPassword] = useInput("");
   const dispatch = useDispatch();
+  const { logInDone, logInLoading } = useSelector(
+    (state: RootState) => state.user
+  );
 
   const router = useRouter();
 
   const onSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     dispatch(
-      loginAction({
+      loginReqAction({
         email,
         password,
       })
     );
-    router.push("/");
   };
+  if (logInDone) {
+    router.push("/");
+  }
   const classes = useStyles();
   return (
     <AuthLayout>
+      {logInLoading && <Progress />}
       <Head>
         <title>Nextwitter | Sign In </title>
       </Head>

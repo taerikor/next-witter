@@ -1,3 +1,4 @@
+import { ADD_POST_REQUEST } from './actionTypes';
 
 const initialState = {
     mainPosts: [{
@@ -41,17 +42,16 @@ const dummyPost = {
     Comments: [],
   };
 
-  const ADD_POST = 'ADD_POST'
 
-  export const addPostAction = () => {
+  export const addPostReqAction = () => {
       return {
-          type: ADD_POST
+          type: ADD_POST_REQUEST
       }
   }
 
 const reducer = (state=initialState, action) => {
     switch(action.type){
-        case ADD_POST :
+        case ADD_POST_REQUEST :
             return {
                 ...state,
                 mainPosts: [dummyPost, ...state.mainPosts],
@@ -61,5 +61,5 @@ const reducer = (state=initialState, action) => {
     }
 }
 
-
+export type IPostState = ReturnType<typeof reducer>;
 export default reducer;

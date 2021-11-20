@@ -3,6 +3,7 @@ import AppLayout from "../components/AppLayout";
 import Head from "next/head";
 import {
   FormControl,
+  Grid,
   IconButton,
   InputAdornment,
   InputLabel,
@@ -30,8 +31,10 @@ const Profile = () => {
           }
         />
       </FormControl>
-      <FollowList title="Following" />
-      <FollowList title="Follower" />
+      <Grid container>
+        <FollowList title="Following" />
+        <FollowList title="Follower" />
+      </Grid>
     </AppLayout>
   );
 };

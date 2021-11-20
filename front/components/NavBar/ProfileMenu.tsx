@@ -1,13 +1,20 @@
 import { Button, Menu, MenuItem } from "@mui/material";
 import React from "react";
 import Link from "next/link";
-import { useDispatch } from "react-redux";
-import { logoutAction } from "../../reducer/user";
+import { useDispatch, useSelector } from "react-redux";
+import { logoutReqAction } from "../../reducer/user";
+import { RootState } from "../../reducer";
+import Progress from "../Progress";
+import { useRouter } from "next/dist/client/router";
 
 const ProfileMenu = ({ anchorEl, menuId, isMenuOpen, handleMenuClose }) => {
+  const { logOutLoading, logOutDone } = useSelector(
+    (state: RootState) => state.user
+  );
   const dispatch = useDispatch();
+  const router = useRouter();
   const onLogoutClick = () => {
-    dispatch(logoutAction());
+    dispatch(logoutReqAction());
   };
 
   return (
@@ -26,6 +33,7 @@ const ProfileMenu = ({ anchorEl, menuId, isMenuOpen, handleMenuClose }) => {
       open={isMenuOpen}
       onClose={handleMenuClose}
     >
+      {logOutLoading && <Progress />}
       <MenuItem onClick={handleMenuClose}>
         <Button>
           <Link href="/profile">
