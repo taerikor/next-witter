@@ -1,5 +1,4 @@
 import { LOG_IN_FAILURE, LOG_IN_REQUEST, LOG_IN_SUCCESS, LOG_OUT_FAILURE, LOG_OUT_REQUEST, LOG_OUT_SUCCESS } from './actionTypes'
-
 const initialState = {
         isLoggedIn: false,
         user:null,
@@ -15,7 +14,10 @@ const initialState = {
 export const loginReqAction = (data) => {
    return {
     type: LOG_IN_REQUEST,
-    data
+    data:{
+        ...data,
+        id:1
+    }
    } 
 }
 export const logoutReqAction = () => {

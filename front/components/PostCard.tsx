@@ -67,7 +67,6 @@ interface PostCardProps {
 const PostCard: React.FunctionComponent<PostCardProps> = ({ post }) => {
   const [isLike, setIsLike] = useState(false);
   const [isOpenComment, setIsOpenComment] = useState(false);
-  const [expanded, setExpanded] = React.useState(false);
 
   const onExpandClick = () => {
     setIsOpenComment((prev) => !prev);
@@ -118,7 +117,7 @@ const PostCard: React.FunctionComponent<PostCardProps> = ({ post }) => {
           </ExpandMore>
         </CardActions>
         <Collapse in={isOpenComment} timeout="auto" unmountOnExit>
-          <CommentForm />
+          <CommentForm postId={post.id} />
           <List sx={{ width: "100%", bgcolor: "background.paper" }}>
             {post.Comments.map((comment, index) => (
               <Comment key={index} comment={comment} />

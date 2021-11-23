@@ -32,7 +32,7 @@ const TweetForm = () => {
 
   const onTweetSubmit = (e: FormEvent) => {
     e.preventDefault();
-    dispatch(addPostReqAction());
+    dispatch(addPostReqAction(tweet));
     setTweet("");
   };
   return (
