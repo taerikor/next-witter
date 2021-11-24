@@ -25,3 +25,7 @@ export const ADD_COMMENT_FAILURE = 'add_comment_failure'
 export const REMOVE_POST_REQUEST = 'remove_post_request'
 export const REMOVE_POST_SUCCESS = 'remove_post_success'
 export const REMOVE_POST_FAILURE = 'remove_post_failure'
+
+export const LOAD_POST_REQUEST = 'load_post_request'
+export const LOAD_POST_SUCCESS = 'load_post_success'
+export const LOAD_POST_FAILURE = 'load_post_failure'

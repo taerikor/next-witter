@@ -119,7 +119,7 @@ const PostCard: React.FunctionComponent<PostCardProps> = ({ post }) => {
       open={isMenuOpen}
       onClose={handleMenuClose}
     >
-      {userId === post.User.id && (
+      {userId === post.User?.id && (
         <MenuItem>
           <Button color="inherit" onClick={onDeleteClick}>
             Delete

@@ -1,34 +1,9 @@
-import { ADD_COMMENT_FAILURE, ADD_COMMENT_REQUEST, ADD_COMMENT_SUCCESS, ADD_POST_FAILURE, ADD_POST_REQUEST, ADD_POST_SUCCESS, REMOVE_POST_FAILURE, REMOVE_POST_REQUEST, REMOVE_POST_SUCCESS } from './actionTypes';
+import { ADD_COMMENT_FAILURE, ADD_COMMENT_REQUEST, ADD_COMMENT_SUCCESS, ADD_POST_FAILURE, ADD_POST_REQUEST, ADD_POST_SUCCESS, LOAD_POST_FAILURE, LOAD_POST_REQUEST, LOAD_POST_SUCCESS, REMOVE_POST_FAILURE, REMOVE_POST_REQUEST, REMOVE_POST_SUCCESS } from './actionTypes';
 import shortid from 'shortid'
 import produce from "immer"
 
 const initialState = {
-    mainPosts: [{
-        id: shortid.generate(),
-        User: {
-          id: 1,
-          nickname: '제로초',
-        },
-        content: '첫 번째 게시글 #hashtag #해시태그#hash',
-        Images: [{
-          src: 'https://bookthumb-phinf.pstatic.net/cover/137/995/13799585.jpg?udate=20180726',
-        }, {
-          src: 'https://gimg.gilbut.co.kr/book/BN001958/rn_view_BN001958.jpg',
-        },{
-          src: 'https://gimg.gilbut.co.kr/book/BN001998/rn_view_BN001998.jpg',
-        }],
-        Comments: [{
-          User: {
-            nickname: 'nero',
-          },
-          content: '우와 개정판이 나왔군요~',
-        }, {
-          User: {
-            nickname: 'hero',
-          },
-          content: '얼른 사고싶어요~',
-        }]
-      }],
+    mainPosts: [],
       imagePaths: [],
       postAdded: false,
       addPostLoading: false,
@@ -40,10 +15,12 @@ const initialState = {
       addCommentLoading: false,
       addCommentDone: false,
       addCommentError: null,
-      
+      loadPostLoading: false,
+      loadPostDone: false,
+      loadPostError: null,
+      hasMorePosts: true,
 }
-initialState.mainPosts = initialState.mainPosts.concat(
-  Array(20).fill(2).map(() => ({
+export const generateDummyPost = (number) => Array(number).fill(2).map(() => ({
     id: shortid.generate(),
     User: {
       id: 1,
@@ -65,7 +42,7 @@ initialState.mainPosts = initialState.mainPosts.concat(
       content: '얼른 사고싶어요~',
     }]
   }))
-)
+
 const dummyPost = (data) => ({
     id: shortid.generate(),
     content: data,
@@ -112,12 +89,26 @@ const dummyComment = (data) => ({
 const reducer = (state=initialState, action) => {
   return produce(state, (draft) => {
     switch(action.type){
+      case LOAD_POST_REQUEST :
+        draft.loadPostLoading=true;
+        draft.loadPostError=null;
+        draft.loadPostDone=false;
+        break;
+      case LOAD_POST_SUCCESS :
+        draft.loadPostLoading=false
+        draft.loadPostDone=true;
+        draft.mainPosts = action.data.concat(draft.mainPosts)
+        draft.hasMorePosts = draft.mainPosts.length < 50
+        break;
+      case LOAD_POST_FAILURE :
+        draft.loadPostLoading=false;
+        draft.loadPostError=action.error;
+        break;
       case ADD_POST_REQUEST :
         draft.addPostLoading=true;
         draft.addPostError=null;
         draft.addPostDone=false;
         break;
-
       case ADD_POST_SUCCESS :
         draft.addPostLoading=false
         draft.addPostDone=true;
