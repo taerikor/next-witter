@@ -1,6 +1,7 @@
 import { styled } from "@mui/material/styles";
 import {
   Avatar,
+  Button,
   Card,
   CardActions,
   CardContent,
@@ -9,6 +10,8 @@ import {
   IconButton,
   IconButtonProps,
   List,
+  Menu,
+  MenuItem,
   Typography,
 } from "@mui/material";
 import React, { useState } from "react";
@@ -22,6 +25,9 @@ import CardImage from "./CardImage";
 
 import styledComp from "styled-components";
 import PostContent from "./PostContent";
+import { useDispatch, useSelector } from "react-redux";
+import { removePostReqAction } from "../reducer/post";
+import { RootState } from "../reducer";
 
 interface ExpandMoreProps extends IconButtonProps {
   expand: boolean;
@@ -56,17 +62,34 @@ interface PostCardProps {
     Comments: IComments[];
     Images: IImages[];
     User: {
-      id: number;
+      id: number | string;
       nickname: string;
     };
     content: string;
-    id: number;
+    id: number | string;
   };
 }
 
 const PostCard: React.FunctionComponent<PostCardProps> = ({ post }) => {
+  const dispatch = useDispatch();
   const [isLike, setIsLike] = useState(false);
   const [isOpenComment, setIsOpenComment] = useState(false);
+
+  const userId = useSelector((state: RootState) => state.user?.user?.id);
+
+  const [moreAnchorEl, setMoreAnchorEl] = useState<null | HTMLElement>(null);
+
+  const isMenuOpen = Boolean(moreAnchorEl);
+
+  const handleMenuClose = () => {
+    setMoreAnchorEl(null);
+  };
+
+  const handleMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
+    setMoreAnchorEl(event.currentTarget);
+  };
+
+  const MenuId = "primary-search-account-menu";
 
   const onExpandClick = () => {
     setIsOpenComment((prev) => !prev);
@@ -75,6 +98,39 @@ const PostCard: React.FunctionComponent<PostCardProps> = ({ post }) => {
   const onLikeClick = () => {
     setIsLike((prev) => !prev);
   };
+
+  const onDeleteClick = () => {
+    dispatch(removePostReqAction(post.id));
+  };
+
+  const renderMenu = (
+    <Menu
+      anchorEl={moreAnchorEl}
+      anchorOrigin={{
+        vertical: "top",
+        horizontal: "right",
+      }}
+      id={MenuId}
+      keepMounted
+      transformOrigin={{
+        vertical: "top",
+        horizontal: "right",
+      }}
+      open={isMenuOpen}
+      onClose={handleMenuClose}
+    >
+      {userId === post.User.id && (
+        <MenuItem>
+          <Button color="inherit" onClick={onDeleteClick}>
+            Delete
+          </Button>
+        </MenuItem>
+      )}
+      <MenuItem>
+        <Button color="inherit">Report</Button>
+      </MenuItem>
+    </Menu>
+  );
 
   return (
     <CardWrapper>
@@ -86,7 +142,14 @@ const PostCard: React.FunctionComponent<PostCardProps> = ({ post }) => {
             </Avatar>
           }
           action={
-            <IconButton aria-label="settings">
+            <IconButton
+              size="medium"
+              aria-label="show more"
+              aria-controls={MenuId}
+              aria-haspopup="true"
+              onClick={handleMenuOpen}
+              color="inherit"
+            >
               <MoreVertIcon />
             </IconButton>
           }
@@ -125,6 +188,7 @@ const PostCard: React.FunctionComponent<PostCardProps> = ({ post }) => {
           </List>
         </Collapse>
       </Card>
+      {renderMenu}
     </CardWrapper>
   );
 };

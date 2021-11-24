@@ -1,9 +1,10 @@
-import { ADD_COMMENT_FAILURE, ADD_COMMENT_REQUEST, ADD_COMMENT_SUCCESS, ADD_POST_FAILURE, ADD_POST_REQUEST, ADD_POST_SUCCESS } from './actionTypes';
+import { ADD_COMMENT_FAILURE, ADD_COMMENT_REQUEST, ADD_COMMENT_SUCCESS, ADD_POST_FAILURE, ADD_POST_REQUEST, ADD_POST_SUCCESS, REMOVE_POST_FAILURE, REMOVE_POST_REQUEST, REMOVE_POST_SUCCESS } from './actionTypes';
 import shortid from 'shortid'
+import produce from "immer"
 
 const initialState = {
     mainPosts: [{
-        id: 1,
+        id: shortid.generate(),
         User: {
           id: 1,
           nickname: '제로초',
@@ -33,12 +34,38 @@ const initialState = {
       addPostLoading: false,
       addPostDone: false,
       addPostError: null,
+      removePostLoading: false,
+      removePostDone: false,
+      removePostError: null,
       addCommentLoading: false,
       addCommentDone: false,
       addCommentError: null,
       
 }
-
+initialState.mainPosts = initialState.mainPosts.concat(
+  Array(20).fill(2).map(() => ({
+    id: shortid.generate(),
+    User: {
+      id: 1,
+      nickname: '제로초',
+    },
+    content: '첫 번째 게시글 #hashtag #해시태그#hash',
+    Images: [{
+      src: 'https://bookthumb-phinf.pstatic.net/cover/137/995/13799585.jpg?udate=20180726',
+    }],
+    Comments: [{
+      User: {
+        nickname: 'nero',
+      },
+      content: '우와 개정판이 나왔군요~',
+    }, {
+      User: {
+        nickname: 'hero',
+      },
+      content: '얼른 사고싶어요~',
+    }]
+  }))
+)
 const dummyPost = (data) => ({
     id: shortid.generate(),
     content: data,
@@ -67,6 +94,13 @@ const dummyComment = (data) => ({
 
       }
   }
+  export const removePostReqAction = (data) => {
+      return {
+          type: REMOVE_POST_REQUEST,
+          data
+
+      }
+  }
   export const addCommentReqAction = (data) => {
       return {
           type: ADD_COMMENT_REQUEST,
@@ -76,54 +110,57 @@ const dummyComment = (data) => ({
   }
 
 const reducer = (state=initialState, action) => {
+  return produce(state, (draft) => {
     switch(action.type){
-        case ADD_POST_REQUEST :
-            return {
-                ...state,
-                addPostLoading:true,
-                addPostError: null,
-                addPostDone: false,
-            }
-        case ADD_POST_SUCCESS :
-            return {
-                ...state,
-                mainPosts: [dummyPost(action.data), ...state.mainPosts],
-                addPostLoading:false,
-                addPostDone: true,
-            }
-        case ADD_POST_FAILURE :
-            return {
-                ...state,
-                addPostLoading:false,
-                addPostError: action.error,
-            }
-        case ADD_COMMENT_REQUEST :
-            return {
-                ...state,
-                addCommentLoading:true,
-                addCommentError: null,
-                addCommentDone: false,
-            }
-        case ADD_COMMENT_SUCCESS :
-            const postIndex = state.mainPosts.findIndex(post => post.id === action.data.postId)
-            const post = {...state.mainPosts[postIndex]}
-            post.Comments = [dummyComment(action.data),...post.Comments]
-            const mainPosts = [...state.mainPosts]
-            mainPosts[postIndex] = post
-            return {
-                ...state,
-                mainPosts,
-                addCommentLoading:false,
-                addCommentDone: true,
-            }
-        case ADD_COMMENT_FAILURE :
-            return {
-                ...state,
-                addCommentLoading:false,
-                addCommentError: action.error,
-            }
-        default: return state;
-    }
+      case ADD_POST_REQUEST :
+        draft.addPostLoading=true;
+        draft.addPostError=null;
+        draft.addPostDone=false;
+        break;
+
+      case ADD_POST_SUCCESS :
+        draft.addPostLoading=false
+        draft.addPostDone=true;
+        draft.mainPosts.unshift(dummyPost(action.data))
+        break;
+      case ADD_POST_FAILURE :
+        draft.addPostLoading=false;
+        draft.addPostError=action.error;
+        break;
+      case REMOVE_POST_REQUEST :
+        draft.removePostLoading=true;
+        draft.removePostError=null;
+        draft.removePostDone=false;
+        break;
+      case REMOVE_POST_SUCCESS :
+              draft.mainPosts = state.mainPosts.filter((post) => post.id !== action.data);
+              draft.removePostLoading=false;
+              draft.removePostDone= true;
+          break
+      case REMOVE_POST_FAILURE :
+        draft.removePostLoading=false;
+        draft.removePostError=action.error;
+        break;
+      case ADD_COMMENT_REQUEST :
+        draft.addCommentLoading=true;
+        draft.addCommentError=null;
+        draft.addCommentDone=false;
+        break;
+      case ADD_COMMENT_SUCCESS :
+          const post = draft.mainPosts.find(post => post.id === action.data.postId)
+          post.Comments.unshift(dummyComment(action.data))
+
+          draft.addCommentLoading=false;
+          draft.addCommentError=action.error;
+          break;
+      case ADD_COMMENT_FAILURE :
+        draft.addCommentLoading=false;
+        draft.addCommentError=action.error;
+        break
+      default: return state;
+  }
+  })
+    
 }
 
 export type IPostState = ReturnType<typeof reducer>;

@@ -25,7 +25,7 @@ interface AppBarProps {
 const PrimarySearchAppBar: React.FunctionComponent<AppBarProps> = ({
   isLoggedIn,
 }) => {
-  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] =
     useState<null | HTMLElement>(null);
 
