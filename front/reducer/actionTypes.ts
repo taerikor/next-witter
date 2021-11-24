@@ -12,6 +12,14 @@ export const SIGN_UP_REQUEST = 'sign_up_request'
 export const SIGN_UP_SUCCESS = 'sign_up_success'
 export const SIGN_UP_FAILURE = 'sign_up_failure'
 
+export const FOLLOW_REQUEST = 'follow_request'
+export const FOLLOW_SUCCESS = 'follow_success'
+export const FOLLOW_FAILURE = 'follow_failure'
+
+export const UNFOLLOW_REQUEST = 'unfollow_request'
+export const UNFOLLOW_SUCCESS = 'unfollow_success'
+export const UNFOLLOW_FAILURE = 'unfollow_failure'
+
 // Post --------------------
 
 export const ADD_POST_REQUEST = 'add_post_request'

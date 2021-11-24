@@ -28,6 +28,7 @@ import PostContent from "./PostContent";
 import { useDispatch, useSelector } from "react-redux";
 import { removePostReqAction } from "../reducer/post";
 import { RootState } from "../reducer";
+import FollowButton from "./FollowButton";
 
 interface ExpandMoreProps extends IconButtonProps {
   expand: boolean;
@@ -75,7 +76,7 @@ const PostCard: React.FunctionComponent<PostCardProps> = ({ post }) => {
   const [isLike, setIsLike] = useState(false);
   const [isOpenComment, setIsOpenComment] = useState(false);
 
-  const userId = useSelector((state: RootState) => state.user?.user?.id);
+  const { user } = useSelector((state: RootState) => state.user);
 
   const [moreAnchorEl, setMoreAnchorEl] = useState<null | HTMLElement>(null);
 
@@ -119,7 +120,7 @@ const PostCard: React.FunctionComponent<PostCardProps> = ({ post }) => {
       open={isMenuOpen}
       onClose={handleMenuClose}
     >
-      {userId === post.User?.id && (
+      {user?.id === post.User.id && (
         <MenuItem>
           <Button color="inherit" onClick={onDeleteClick}>
             Delete
@@ -142,16 +143,19 @@ const PostCard: React.FunctionComponent<PostCardProps> = ({ post }) => {
             </Avatar>
           }
           action={
-            <IconButton
-              size="medium"
-              aria-label="show more"
-              aria-controls={MenuId}
-              aria-haspopup="true"
-              onClick={handleMenuOpen}
-              color="inherit"
-            >
-              <MoreVertIcon />
-            </IconButton>
+            <>
+              {user && user.id !== post.User.id && <FollowButton post={post} />}
+              <IconButton
+                size="medium"
+                aria-label="show more"
+                aria-controls={MenuId}
+                aria-haspopup="true"
+                onClick={handleMenuOpen}
+                color="inherit"
+              >
+                <MoreVertIcon />
+              </IconButton>
+            </>
           }
           title={post.User.nickname}
           subheader="September 14, 2016"
