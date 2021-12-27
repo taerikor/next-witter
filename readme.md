@@ -1,8 +1,12 @@
-# NexTwitter (Twitter Clone)
+# NexTwitter
 
-used and learned Next.js React Redux Express Sequelize(MySQL)
+Twitter Clone with React, Redux, Node, MySQL
+
+## Course
 
 You can watch the tutorial for this app.
+
+> This app is an added and modified function in the existing tutorial.
 
 https://inf.run/YAuW
 
